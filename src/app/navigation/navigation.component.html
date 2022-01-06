@@ -1,0 +1,33 @@
+  <div class="row mb-2 mt-2 text-center">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+      <h4>ZolloZ App</h4>
+      <h6>Today is: {{ today$ | async | date: 'dd.MMM.yyyy HH:mm:ss'}}</h6>
+    </div>
+    <div class="col-md-4">
+    </div>
+  </div>
+
+  <!-- nav bar -->
+  <nav class="navbar navbar-expand-md breadcrumb">
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <div class="nav nav-pills">
+        <a class="nav-item nav-link ml-1" href="" data-toggle="tab" (click)="changeTab('/main')"
+           [ngClass]="{'active': isTabActive('Main')}">Main</a>
+        <a class="nav-item nav-link ml-1" href="" data-toggle="tab" (click)="changeTab('/workflow/tasks')"
+           [ngClass]="{'active': isTabActive('Tasks')}"><i class="fa fa-chart-line"></i>&nbsp;Tasks</a>
+        <a class="nav-item nav-link ml-1" href="" data-toggle="tab" (click)="changeTab('/user/management')"
+           [ngClass]="{'active': isTabActive('Users')}"><i class="fa fa-users"></i>&nbsp;Users</a>
+        <a class="nav-item nav-link ml-1" href="" data-toggle="tab" (click)="changeTab('/department/management')"
+           [ngClass]="{'active': isTabActive('Departments')}"><i class="fa fa-building"></i>&nbsp;Departments</a>
+        <a class="nav-item nav-link ml-1" href="" data-toggle="tab" (click)="changeTab('/position/management')"
+           [ngClass]="{'active': isTabActive('Positions')}"><i class="fa fa-sitemap"></i>&nbsp;Positions</a>
+        <a class="nav-item nav-link ml-1" href="" data-toggle="tab" (click)="changeTab('/settings')"
+           [ngClass]="{'active': isTabActive('Settings')}"><i class="fa fa-cogs"></i>&nbsp;Settings</a>
+        <a class="nav-item nav-link move-right mr-3" href="" data-toggle="tab" (click)="changeTab('/profile')"
+           [ngClass]="{'active': isTabActive('Profile')}">Welcome, {{currentUser?.username}}&nbsp;<i class="fa fa-user"></i></a>
+      </div>
+    </div>
+  </nav>
+

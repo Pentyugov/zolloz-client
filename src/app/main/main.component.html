@@ -1,0 +1,169 @@
+
+<app-sidebar>
+  <div class="row">
+        <div class="col-lg-6 col-1">
+          <div class="row">
+            <div class="col-sm-5 col-3" *ngFor="let note of notes">
+              <div class="card-big-shadow">
+                <div class="card card-just-text" data-background="color" [attr.data-color]="note.color" data-radius="none">
+                  <div class="content">
+                    <h6 class="category">{{note.category}}</h6>
+                    <h4 class="title"><a href="#">{{note.title}}</a></h4>
+                    <p class="description">{{note.description}}</p>
+                  </div>
+                </div> <!-- end card -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+    <div class="col-lg-6 col-2">
+      <div class="row">
+
+        <div class="container-fluid page-todo bootstrap snippets bootdeys">
+          <div class="col-sm-7 tasks">
+            <div class="task-list">
+
+              <h1>Tasks</h1>
+
+              <div class="priority high"><span>high priority</span></div>
+<!--              task starts-->
+              <div class="task high">
+                <div class="desc">
+                  <div class="title">Lorem Ipsum</div>
+                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
+                </div>
+                <div class="time">
+                  <div class="date">Jun 1, 2012</div>
+                  <div> 1 day</div>
+                </div>
+<!--              task ends-->
+              </div>
+              <div class="task high">
+                <div class="desc">
+                  <div class="title">Lorem Ipsum</div>
+                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
+                </div>
+                <div class="time">
+                  <div class="date">Jun 1, 2012</div>
+                  <div>1 day</div>
+                </div>
+              </div>
+              <div class="task high">
+                <div class="desc">
+                  <div class="title">Lorem Ipsum</div>
+                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
+                </div>
+                <div class="time">
+                  <div class="date">Jun 1, 2012</div>
+                  <div> 1 day</div>
+                </div>
+              </div>
+              <div class="task high last">
+                <div class="desc">
+                  <div class="title">Lorem Ipsum</div>
+                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
+                </div>
+                <div class="time">
+                  <div class="date">Jun 1, 2012</div>
+                  <div>1 day</div>
+                </div>
+              </div>
+
+              <div class="priority medium"><span>medium priority</span></div>
+
+              <div class="task medium">
+                <div class="desc">
+                  <div class="title">Lorem Ipsum</div>
+                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
+                </div>
+                <div class="time">
+                  <div class="date">Jun 1, 2012</div>
+                  <div> 1 day</div>
+                </div>
+              </div>
+              <div class="task medium last">
+                <div class="desc">
+                  <div class="title">Lorem Ipsum</div>
+                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
+                </div>
+                <div class="time">
+                  <div class="date">Jun 1, 2012</div>
+                  <div> 1 day</div>
+                </div>
+              </div>
+
+              <div class="priority low"><span>low priority</span></div>
+
+              <div class="task low">
+                <div class="desc">
+                  <div class="title">Lorem Ipsum</div>
+                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
+                </div>
+                <div class="time">
+                  <div class="date">Jun 1, 2012</div>
+                  <div> 1 day</div>
+                </div>
+              </div>
+              <div class="task low">
+                <div class="desc">
+                  <div class="title">Lorem Ipsum</div>
+                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
+                </div>
+                <div class="time">
+                  <div class="date">Jun 1, 2012</div>
+                  <div> 1 day</div>
+                </div>
+              </div>
+              <div class="task low">
+                <div class="desc">
+                  <div class="title">Lorem Ipsum</div>
+                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
+                </div>
+                <div class="time">
+                  <div class="date">Jun 1, 2012</div>
+                  <div> 1 day</div>
+                </div>
+              </div>
+              <div class="task low">
+                <div class="desc">
+                  <div class="title">Lorem Ipsum</div>
+                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
+                </div>
+                <div class="time">
+                  <div class="date">Jun 1, 2012</div>
+                  <div> 1 day</div>
+                </div>
+              </div>
+              <div class="task low">
+                <div class="desc">
+                  <div class="title">Lorem Ipsum</div>
+                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
+                </div>
+                <div class="time">
+                  <div class="date">Jun 1, 2012</div>
+                  <div> 1 day</div>
+                </div>
+              </div>
+              <div class="task low">
+                <div class="desc">
+                  <div class="title">Lorem Ipsum</div>
+                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
+                </div>
+                <div class="time">
+                  <div class="date">Jun 1, 2012</div>
+                  <div> 1 day</div>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</app-sidebar>

@@ -1,0 +1,20 @@
+<app-sidebar>
+  <div id="reset-password">
+    <form #resetPasswordForm="ngForm" >
+      <fieldset>
+        <legend>User Password Management</legend>
+        <div class="form-group">
+          <label >Email address</label>
+          <input type="email" name="resetPasswordEmail" required ngModel class="form-control"
+                 placeholder="Enter email (example@email.com)">
+          <small class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <button type="submit" [disabled]="resetPasswordForm.invalid" class="btn btn-primary">
+          <i *ngIf="refreshing" class="fas fa-spinner fa-spin"></i>&nbsp;&nbsp;
+          <span *ngIf="refreshing">Loading...</span>
+          <span *ngIf="!refreshing" (click)="resetPassword(resetPasswordForm, resetPasswordForm.value.resetPasswordEmail)">Reset Password</span>
+        </button>
+      </fieldset>
+    </form>
+  </div>
+</app-sidebar>
