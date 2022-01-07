@@ -48,6 +48,7 @@ export class PositionService {
     const position = new Position();
     position.id = positionToClone.id;
     position.name = positionToClone.name;
+    position.code = positionToClone.code;
     return position;
   }
 

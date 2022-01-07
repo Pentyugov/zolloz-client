@@ -21,14 +21,15 @@
         <thead class="table-borderless">
         <tr class="text-center">
           <th>Name</th>
+          <th>Code</th>
           <th>ID</th>
         </tr>
         </thead>
         <tbody *ngFor="let position of positions">
         <tr class="text-center">
           <td (click)="setSelectedPosition(position)">{{position?.name}}</td>
+          <td (click)="setSelectedPosition(position)">{{position?.code}}</td>
           <td (click)="setSelectedPosition(position)">{{position?.id}}</td>
-
           <td>
             <div class="btn-group">
               <button class="btn btn-outline-info" (click)="setPositionToUpdate(position)"><i class="fas fa-edit"></i></button>
@@ -84,6 +85,10 @@
                 <label>Name</label>
                 <input type="text" name="name" required ngModel class="form-control">
               </div>
+              <div class="form-group">
+                <label>Code</label>
+                <input type="text" name="code" required ngModel class="form-control">
+              </div>
               <button type="submit" style="display: none;" id="add-new-position-btn"></button>
             </form>
           </div>
@@ -114,6 +119,10 @@
                 <label>Name</label>
                 <input type="text" name="name" required [(ngModel)]="positionToUpdate.name" class="form-control">
               </div>
+              <div class="form-group">
+                <label>Code</label>
+                <input type="text" name="code" required [(ngModel)]="positionToUpdate.code" class="form-control">
+              </div>
               <button type="submit" style="display: none;" id="update-position-btn"></button>
             </form>
           </div>
@@ -142,6 +151,7 @@
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"></li>
                 <li class="list-group-item"><i class="fa fa-id-badge float-right"></i>{{positionSelected?.name}}</li>
+                <li class="list-group-item"><i class="fa fa-id-badge float-right"></i>{{positionSelected?.code}}</li>
               </ul>
           </div>
         </div>
