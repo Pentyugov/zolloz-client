@@ -1,47 +1,72 @@
-<main>
+<div class="d-flex" id="wrapper">
+  <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;" id="sidebar-wrapper">
+    <div class="sidebar-heading">Fast actions</div>
+    <hr>
+      <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+          <button type="button" class="btn btn-link" data-toggle="modal" data-target="#addNoteModal"><i class="far fa-edit"></i>Create note</button>
+        </li>
+        <li>
+          <button type="button" class="btn btn-link"><i class="fas fa-tasks"></i>&nbsp;Create task</button>
+        </li>
+        <li>
+          <button type="button" class="btn btn-link"><i class="far fa-envelope"></i>&nbsp;Create notification</button>
+        </li>
+        <li>
+          <button type="button" class="btn btn-link"><i class="far fa-handshake"></i>&nbsp;Create meeting</button>
+        </li>
+        <li>
+          <button type="button" class="btn btn-link"><i class="fas fa-archive"></i>&nbsp;Archive</button>
+        </li>
+      </ul>
+  </div>
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+      <app-navigation></app-navigation>
+      <ng-content></ng-content>
+    </div>
+  </div>
 
-<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
-  <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
-    <span class="fs-4">Fast Actions</span>
-  </a>
-  <hr>
-  <ul class="nav nav-pills flex-column mb-auto">
-    <li class="nav-item">
-      <a href="#" class="nav-link active" aria-current="page">
-        <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"/></svg>
-        Create task
-      </a>
-    </li>
-    <li>
-      <a href="#" class="nav-link text-white">
-        <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
-        Create note
-      </a>
-    </li>
-    <li>
-      <a href="#" class="nav-link text-white">
-        <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"/></svg>
-        Create sticker
-      </a>
-    </li>
-    <li>
-      <a href="#" class="nav-link text-white">
-        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
-        Products
-      </a>
-    </li>
-    <li>
-      <a href="#" class="nav-link text-white">
-        <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-        Customers
-      </a>
-    </li>
-  </ul>
+  <!-- modal add note -->
+  <div class="modal draggable fade bd-example-modal-lg" id="addNoteModal" tabindex="-1" role="dialog"
+       aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center">New note</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="resetData(newNoteForm)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form #newNoteForm="ngForm">
+              <div class="form-group">
+                <label>Category</label>
+                <select name="category" required ngModel="Remind" class="form-control" [(ngModel)]="noteToCreate.category">
+                  <option value="Remind">Remind</option>
+                  <option value="Notice">Notice</option>
+                  <option value="Warning">Warning</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" required ngModel class="form-control" maxlength="13" placeholder="max length 13" [(ngModel)]="noteToCreate.title">
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea type="text" name="description" required ngModel class="form-control" maxlength="240" placeholder="max length 240" cols="40" rows="6" [(ngModel)]="noteToCreate.description"></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="add-new-note-close-btn" (click)="resetData(newNoteForm)">Close</button>
+          <button type="button" class="btn btn-primary" (click)="onAddNote(newNoteForm)" [disabled]="newNoteForm.invalid">Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="container-fluid">
-  <app-navigation></app-navigation>
-  <ng-content></ng-content>
-</div>
-</main>
 

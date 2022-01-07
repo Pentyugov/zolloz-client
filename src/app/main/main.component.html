@@ -1,31 +1,42 @@
 
 <app-sidebar>
   <div class="row">
-        <div class="col-lg-6 col-1">
+
+        <div class="col-lg-5 col-1">
           <div class="row">
+            <div class="container">
+              <h1 class="text-secondary">My notes</h1>
+            </div>
             <div class="col-sm-5 col-3" *ngFor="let note of notes">
               <div class="card-big-shadow">
-                <div class="card card-just-text" data-background="color" [attr.data-color]="note.color" data-radius="none">
+                <div class="card card-just-text" data-background="color" [attr.data-color]="note.noteColor" data-radius="none">
+
+                  <div class="yourtext">
+                    <button type="button" class="close" aria-label="Close" data-toggle="modal" data-target="#updateNoteModal" (click)="setNoteToUpdate(note)"><i class="far fa-edit"></i></button>
+                  </div>
+
+                  <div class="img-wrap">
+                    <button type="button" class="close" aria-label="Close" data-toggle="modal" data-target="#deleteNoteModal" (click)="setNoteToDelete(note)">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
                   <div class="content">
                     <h6 class="category">{{note.category}}</h6>
-                    <h4 class="title"><a href="#">{{note.title}}</a></h4>
+                    <h4 class="title">{{note.title}}</h4>
                     <p class="description">{{note.description}}</p>
                   </div>
-                </div> <!-- end card -->
+                </div>
               </div>
             </div>
           </div>
-
         </div>
 
     <div class="col-lg-6 col-2">
       <div class="row">
-
+        <h1 class="text-secondary">My tasks</h1>
         <div class="container-fluid page-todo bootstrap snippets bootdeys">
-          <div class="col-sm-7 tasks">
+          <div class="col-sm-12 tasks">
             <div class="task-list">
-
-              <h1>Tasks</h1>
 
               <div class="priority high"><span>high priority</span></div>
 <!--              task starts-->
@@ -164,6 +175,70 @@
       </div>
     </div>
 
+  </div>
+
+<!--  delete note modal -->
+  <div class="modal fade" id="deleteNoteModal" tabindex="-1" role="dialog" aria-labelledby="deleteNoteLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModelLabel">Delete User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-note-delete-modal" (click)="resetData()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete note: {{noteToDelete?.title}}?</p>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="resetData()">No</button>
+            <button (click)="onDeleteNote(noteToDelete.id)" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal update note -->
+  <div class="modal draggable fade bd-example-modal-lg" id="updateNoteModal" tabindex="-3" role="dialog"
+       aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center">Note edit</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form #updateNoteForm="ngForm" >
+              <div class="form-group">
+                <label>Category</label>
+                <select name="category" required ngModel="Remind" class="form-control" [(ngModel)]="noteToUpdate.category">
+                  <option value="Remind">Remind</option>
+                  <option value="Notice">Notice</option>
+                  <option value="Warning">Warning</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" required ngModel class="form-control" maxlength="13" placeholder="max length 13" [(ngModel)]="noteToUpdate.title">
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea type="text" name="description" required ngModel class="form-control" maxlength="240" placeholder="max length 240" cols="40" rows="6" [(ngModel)]="noteToUpdate.description"></textarea>
+              </div>
+              <button type="submit" style="display: none;" id="add-new-note-btn"></button>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="update-note-close-btn">Close</button>
+          <button type="button" class="btn btn-primary" (click)="onUpdateNote()" [disabled]="updateNoteForm.invalid">Update</button>
+        </div>
+      </div>
+    </div>
   </div>
 
 </app-sidebar>

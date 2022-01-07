@@ -23,7 +23,7 @@ const routes: Routes = [
   {path: 'settings', component: SettingsComponent, canActivate: [AuthenticationGuard]},
   {path: 'profile', component: ProfileComponent, canActivate: [AuthenticationGuard]},
   {path: 'sidebar', component: SidebarComponent, canActivate: [AuthenticationGuard]},
-  {path: '', redirectTo: '/login', pathMatch: 'full'},
+  {path: '', redirectTo: '/login', pathMatch: 'full', },
 ];
 
 @NgModule({
