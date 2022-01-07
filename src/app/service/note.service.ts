@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
 import {Note} from "../model/note";
 import {NoteCategory} from "../enum/note-category.enum";
-import {User} from "../model/user";
 import {CustomHttpResponse} from "../model/custom-http-response";
 
 @Injectable({
@@ -29,6 +28,10 @@ export class NoteService {
     return this.httpClient.get<Note[]>(`${this.host}/note/get-all-for-current-user`);
   }
 
+  public deleteNote(id: string): Observable<CustomHttpResponse> {
+    return this.httpClient.delete<CustomHttpResponse>(`${this.host}/note/delete-note/${id}`);
+  }
+
   public createNoteFormData(note: Note): FormData {
     const formData = new FormData();
     formData.append('id', '');
@@ -37,10 +40,6 @@ export class NoteService {
     formData.append('title', note.title);
 
     return formData;
-  }
-
-  public deleteNote(id: string): Observable<CustomHttpResponse> {
-    return this.httpClient.delete<CustomHttpResponse>(`${this.host}/note/delete-note/${id}`);
   }
 
   public addNoteToLocalCache(note: Note): void {

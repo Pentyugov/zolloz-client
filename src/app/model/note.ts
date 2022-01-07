@@ -4,4 +4,13 @@ export class Note {
   title: string;
   description: string;
   noteColor: string;
+
+  constructor() {
+    this.id = '';
+    this.title = '';
+    this.category = '';
+    this.description = '';
+    this.noteColor = '';
+  }
+
 }
