@@ -100,7 +100,7 @@ export class PositionComponent implements OnInit {
         }, (errorResponse: HttpErrorResponse) => {
           this.showNotification(NotificationType.ERROR, errorResponse.error.message);
         });
-    }
+   }
 
 
   public search(searchTerm: string): void {

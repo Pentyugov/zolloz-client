@@ -35,7 +35,6 @@ export class NavigationComponent implements OnInit {
 
 
     this.activeTab = localStorage.getItem('activeTab');
-    console.log(this.activeTab);
   }
 
   ngOnInit(): void {
