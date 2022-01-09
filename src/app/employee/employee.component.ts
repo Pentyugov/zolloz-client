@@ -14,6 +14,7 @@ import {CustomHttpResponse} from "../model/custom-http-response";
 import {DepartmentService} from "../service/department.service";
 import {Department} from "../model/department";
 import {Position} from "../model/position";
+import {User} from "../model/user";
 
 @Component({
   selector: 'app-employee',
@@ -25,11 +26,13 @@ export class EmployeeComponent implements OnInit {
   public employees: Employee[] = [];
   public departments: Department[] = [];
   public positions: Position[] = [];
+  public users: User[] = [];
   public employeeToUpdate: Employee = new Employee();
   public employeeToDelete: Employee = new Employee();
   public employeeSelected: Employee = new Employee();
   public employeeDepartmentMap = new Map<Employee, Department>();
   public employeePositionMap = new Map<Employee, Position>();
+  public employeeUserMap = new Map<Employee, User>();
   public refreshing = false;
 
 
@@ -57,6 +60,7 @@ export class EmployeeComponent implements OnInit {
 
         this.getDepartments(false);
         this.getPositions(false);
+        this.getUsers(false);
         if (showNotification) {
           this.showNotification(NotificationType.SUCCESS, `${response.length} employees(s) loaded successfully.`)
         }
@@ -96,6 +100,20 @@ export class EmployeeComponent implements OnInit {
     this.refreshing = false;
   }
 
+  public getUsers(showNotification: boolean): void {
+    this.refreshing = true;
+      this.userService.getUsers().subscribe(
+        (response: User[]) => {
+          this.userService.addUsersToLocalCache(response);
+          this.users = this.userService.getUsersFromLocalCache();
+          this.updateEmployeeUserMap();
+          if (showNotification) {
+            this.showNotification(NotificationType.SUCCESS, `${response.length} user(s) loaded successfully.`)
+          }
+        });
+    this.refreshing = false;
+  }
+
   public setSelectedEmployee(employee: Employee): void {
     this.employeeSelected = employee;
     this.clickButton('open-employee-info-btn');
@@ -125,6 +143,16 @@ export class EmployeeComponent implements OnInit {
       for (let position of this.positions) {
         if (employee.positionId === position.id) {
           this.employeePositionMap.set(employee, position);
+        }
+      }
+    }
+  }
+
+  public updateEmployeeUserMap(): void {
+    for (let employee of this.employees) {
+      for (let user of this.users) {
+        if (employee.userId === user.id) {
+          this.employeeUserMap.set(employee, user);
         }
       }
     }

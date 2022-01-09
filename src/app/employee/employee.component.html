@@ -105,6 +105,7 @@
                 <li class="list-group-item"><i class="fa fa-calendar float-right"></i><b>Dismissal date:</b>  {{employeeSelected?.dismissalDate | date: 'dd.MM.yyyy'}}</li>
                 <li class="list-group-item"><i class="fa fa-building float-right"></i><b>Department:</b>  {{employeeDepartmentMap.get(employeeSelected)?.name}}</li>
                 <li class="list-group-item"><i class="fa fa-sitemap float-right"></i><b>Position:</b> {{employeePositionMap.get(employeeSelected)?.name}}</li>
+                <li class="list-group-item"><i class="fa fa-users float-right"></i><b>User:</b> {{employeeUserMap.get(employeeSelected)?.username}}</li>
               </ul>
             </div>
           </div>
