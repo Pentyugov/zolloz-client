@@ -24,7 +24,7 @@ export class DepartmentComponent implements OnInit {
   public departmentToDelete: Department = new Department();
   public departmentSelected: Department = new Department();
   public departmentToCreate: Department = new Department();
-  public selectedParentDepartment: Department | null;
+  public selectedParentDepartment: Department | null = new Department();
   public parentDepartments: Department[] = [];
 
   public showInfo = false;
@@ -95,7 +95,11 @@ export class DepartmentComponent implements OnInit {
         this.parentDepartments.push(dept);
       }
     }
-    console.log(this.departmentToUpdate.parentDepartment?.name)
+    console.log(this.departmentToUpdate.parentDepartment?.name);
+    if (this.departmentToUpdate.parentDepartment) {
+      this.selectedParentDepartment = this.departmentToUpdate.parentDepartment;
+    }
+
     this.clickButton('open-department-update-btn');
   }
 
@@ -147,18 +151,26 @@ export class DepartmentComponent implements OnInit {
     }
   }
 
-  public updateIsMain(): void {
-    this.isMain = !this.isMain;
-    this.departmentToCreate.parentDepartment = null;
+  public resetUpdateParentDepartmentInput(): void {
     this.departmentToUpdate.parentDepartment = null;
+    this.selectedParentDepartment = null;
   }
 
-  public updateParentDepartment(departmentId: string): void {
-    for (let dept of this.departments) {
-      if (dept.id === departmentId) {
-        this.selectedParentDepartment = dept;
+  public resetCreateParentDepartmentInput(): void {
+    this.departmentToCreate.parentDepartment = null;
+    this.selectedParentDepartment = null;
+}
+
+  public updateSelectedParentDepartment(event:any) {
+    if (event.target.value !== 'null') {
+      let tmp = this.departments.find(dept => dept.id === event.target.value);
+      if (tmp) {
+        this.selectedParentDepartment = tmp;
       }
+    } else {
+      this.selectedParentDepartment = null;
     }
+    console.log(this.selectedParentDepartment?.name);
   }
 
   private clickButton(buttonId: string): void {

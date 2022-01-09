@@ -24,6 +24,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import {ScrollingModule} from "@angular/cdk/scrolling";
+import { EmployeeComponent } from './employee/employee.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {ScrollingModule} from "@angular/cdk/scrolling";
     NavigationComponent,
     SettingsComponent,
     ProfileComponent,
-    SidebarComponent
+    SidebarComponent,
+    EmployeeComponent
   ],
     imports: [
         BrowserModule,

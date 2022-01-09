@@ -11,6 +11,7 @@ import {SettingsComponent} from "./settings/settings.component";
 import {ProfileComponent} from "./profile/profile.component";
 import {AuthenticationGuard} from "./guard/authentication.guard";
 import {SidebarComponent} from "./sidebar/sidebar.component";
+import {EmployeeComponent} from "./employee/employee.component";
 
 const routes: Routes = [
   {path: 'main', component: MainComponent, canActivate: [AuthenticationGuard]},
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path: 'department/management', component: DepartmentComponent, canActivate: [AuthenticationGuard]},
   {path: 'position/management', component: PositionComponent, canActivate: [AuthenticationGuard]},
   {path: 'user/management', component: UserComponent, canActivate: [AuthenticationGuard]},
+  {path: 'employee/management', component: EmployeeComponent, canActivate: [AuthenticationGuard]},
   {path: 'workflow/tasks', component: TaskComponent, canActivate: [AuthenticationGuard]},
   {path: 'settings', component: SettingsComponent, canActivate: [AuthenticationGuard]},
   {path: 'profile', component: ProfileComponent, canActivate: [AuthenticationGuard]},

@@ -101,15 +101,15 @@
                     </div>
                     <div class="form-group">
                       <label>Parent department</label>
-                      <select name="parentDepartment" #parentDepartmentInput class="form-control" [disabled]="isMain" [(ngModel)]="departmentToCreate.parentDepartment"
-                              (change)="updateParentDepartment(parentDepartmentInput.value)">
+                      <select name="parentDepartment" ngModel class="form-control" [disabled]="departmentToCreate.head" (change)="updateSelectedParentDepartment($event)">
+                        <option [value]="null" [selected]="departmentToCreate.head">No parent</option>
                         <option [value]="department.id" *ngFor="let department of departments">{{department.name}}</option>
                       </select>
                     </div>
                     <fieldset class="form-group">
                       <div class="form-check">
                         <label class="form-check-label">
-                          <input type="checkbox" name="main" ngModel class="form-check-input" (change)="updateIsMain()" [(ngModel)]="departmentToCreate.head">Head
+                          <input type="checkbox" name="main" ngModel class="form-check-input" (change)="resetCreateParentDepartmentInput()" [(ngModel)]="departmentToCreate.head">Head
                         </label>
                       </div>
                     </fieldset>
@@ -149,16 +149,15 @@
                     </div>
                     <div class="form-group">
                       <label>Parent department</label>
-                      <select name="parentDepartment" #parentUpdateDepartmentInput class="form-control" [disabled]="isMain"
-                              (change)="updateParentDepartment(parentUpdateDepartmentInput.value)">
-                        <option [value]="departmentToUpdate.parentDepartment?.id">{{departmentToUpdate.parentDepartment?.name}}</option>
+                      <select name="parentDepartment" class="form-control" [disabled]="departmentToUpdate.head" (change)="updateSelectedParentDepartment($event)">
+                        <option [value]="null" [selected]="departmentToUpdate.head">No parent</option>
                         <option [value]="department.id" *ngFor="let department of parentDepartments">{{department.name}}</option>
                       </select>
                     </div>
                     <fieldset class="form-group">
                       <div class="form-check">
                         <label class="form-check-label">
-                          <input type="checkbox" name="main" ngModel class="form-check-input" (change)="updateIsMain()" [(ngModel)]="departmentToUpdate.head">Head
+                          <input type="checkbox" name="main" ngModel class="form-check-input" (change)="resetUpdateParentDepartmentInput()" [(ngModel)]="departmentToUpdate.head">Head
                         </label>
                       </div>
                     </fieldset>
