@@ -38,12 +38,6 @@ export class UserService {
     localStorage.setItem('users', JSON.stringify(users));
   }
 
-  public updateUserProfileImage(formData: FormData): Observable<HttpEvent<User> | HttpErrorResponse> {
-    return this.httpClient.post<User>(`${this.host}/update-profile-image`,formData,
-      {reportProgress: true,
-        observe: 'events'
-      });
-  }
 
   public getUsersFromLocalCache(): User[] {
     if (localStorage.getItem('users')) {
@@ -52,6 +46,14 @@ export class UserService {
 
     return [];
   }
+
+  public updateUserProfileImage(formData: FormData): Observable<HttpEvent<User> | HttpErrorResponse> {
+    return this.httpClient.post<User>(`${this.host}/update-profile-image`,formData,
+      {reportProgress: true,
+        observe: 'events'
+      });
+  }
+
 
   public createUserFormData(user: User, profileImage: File | null): FormData {
     const formData = new FormData();

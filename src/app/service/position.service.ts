@@ -3,8 +3,7 @@ import {Observable} from "rxjs";
 import {CustomHttpResponse} from "../model/custom-http-response";
 import {Position} from "../model/position";
 import {environment} from "../../environments/environment";
-import {HttpClient, HttpErrorResponse, HttpEvent} from "@angular/common/http";
-import {User} from "../model/user";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
