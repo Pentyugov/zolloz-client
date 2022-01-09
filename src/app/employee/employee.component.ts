@@ -13,6 +13,7 @@ import {NgForm} from "@angular/forms";
 import {CustomHttpResponse} from "../model/custom-http-response";
 import {DepartmentService} from "../service/department.service";
 import {Department} from "../model/department";
+import {Position} from "../model/position";
 
 @Component({
   selector: 'app-employee',
@@ -23,10 +24,12 @@ export class EmployeeComponent implements OnInit {
 
   public employees: Employee[] = [];
   public departments: Department[] = [];
+  public positions: Position[] = [];
   public employeeToUpdate: Employee = new Employee();
   public employeeToDelete: Employee = new Employee();
   public employeeSelected: Employee = new Employee();
   public employeeDepartmentMap = new Map<Employee, Department>();
+  public employeePositionMap = new Map<Employee, Position>();
   public refreshing = false;
 
 
@@ -42,18 +45,18 @@ export class EmployeeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getEmployees(true, true);
+    this.getEmployees(true);
   }
 
-  public getEmployees(showNotification: boolean, loadDepartments: boolean): void {
+  public getEmployees(showNotification: boolean): void {
     this.refreshing = true;
     this.employeeService.getEmployees().subscribe(
       (response: Employee[]) => {
         this.employeeService.addEmployeesToLocalCache(response);
         this.employees = this.employeeService.getEmployeesFromLocalCache();
-        if (loadDepartments) {
-          this.getDepartments(false);
-        }
+
+        this.getDepartments(false);
+        this.getPositions(false);
         if (showNotification) {
           this.showNotification(NotificationType.SUCCESS, `${response.length} employees(s) loaded successfully.`)
         }
@@ -75,6 +78,20 @@ export class EmployeeComponent implements OnInit {
         }
       },(errorResponse: HttpErrorResponse) => {
         this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+      });
+    this.refreshing = false;
+  }
+
+  public getPositions(showNotification: boolean): void {
+    this.refreshing = true;
+    this.positionService.getPositions().subscribe(
+      (response: Position[]) => {
+        this.positionService.addPositionsToLocalCache(response);
+        this.positions = this.positionService.getPositionsFromLocalCache();
+        this.updateEmployeePositionMap();
+        if (showNotification) {
+          this.showNotification(NotificationType.SUCCESS, `${response.length} position(s) loaded successfully.`)
+        }
       });
     this.refreshing = false;
   }
@@ -103,6 +120,16 @@ export class EmployeeComponent implements OnInit {
     }
   }
 
+  public updateEmployeePositionMap(): void {
+    for (let employee of this.employees) {
+      for (let position of this.positions) {
+        if (employee.positionId === position.id) {
+          this.employeePositionMap.set(employee, position);
+        }
+      }
+    }
+  }
+
   public search(searchTerm: string): void {
     const results: Employee[] = [];
     for (const employee of this.employees) {
@@ -123,7 +150,7 @@ export class EmployeeComponent implements OnInit {
   public onDeleteEmployee(employeeId: string): void {
     this.employeeService.deleteEmployee(employeeId).subscribe((response: CustomHttpResponse) => {
       this.clickButton('close-employee-delete-modal');
-      this.getEmployees(false, true);
+      this.getEmployees(false);
       this.resetData(null);
       this.showNotification(NotificationType.WARNING, response.message);
     }, (errorResponse: HttpErrorResponse) => {

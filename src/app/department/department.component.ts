@@ -114,7 +114,8 @@ export class DepartmentComponent implements OnInit {
   public search(searchTerm: string): void {
     const results: Department[] = [];
     for (const department of this.departments) {
-      if ((department.name != null && department.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)) {
+      if ((department.name != null && department.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1) ||
+          (department.code != null && department.code.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)) {
         results.push(department);
       }
     }

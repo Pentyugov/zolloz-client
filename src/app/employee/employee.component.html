@@ -12,7 +12,7 @@
           <button  type="button" class="btn btn-info" data-toggle="modal" data-target="#addPositionModal"><i class="fa fa-plus"></i>&nbsp;New Employee</button>
         </div>
         <div class="btn-group">
-          <button type="button" class="btn btn-info" (click)="getEmployees(true, true)">
+          <button type="button" class="btn btn-info" (click)="getEmployees(true)">
             <i class="fas fa-sync fa-spin" *ngIf="refreshing"></i><i class="fas fa-sync" *ngIf="!refreshing"></i>
           </button>
         </div>
@@ -75,6 +75,45 @@
     </div>
   </div>
 
-
+  <!-- modal user info -->
+  <div class="modal fade bd-example-modal-lg" id="viewEmployeeModal" tabindex="-1" role="dialog" aria-labelledby=""
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center" id="exampleModalLongTitle">Employee info</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <div class="card">
+                  <div class="col d-flex flex-column flex-sm-row justify-content-between">
+                    <div class="text-center text-sm-left mb-sm-0">
+                      <h6 class="pt-sm-2 pb-1 mb-0 text-nowrap"></h6>
+                      <h2 class="mb-1">{{employeeSelected?.lastName}} {{employeeSelected?.firstName}} {{employeeSelected?.middleName}}&nbsp;<span [hidden]="!employeeSelected?.head" class="badge badge-success float-right">Head</span></h2>
+                    </div>
+                  </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"></li>
+                <li class="list-group-item"><i class="fa fa-address-card float-right"></i><b>ID:</b>  {{employeeSelected?.id}}</li>
+                <li class="list-group-item"><i class="fa fa-envelope float-right"></i><b>E-Mail:</b> {{employeeSelected?.email}}</li>
+                <li class="list-group-item"><i class="fa fa-phone float-right"></i><b>Phone:</b> {{employeeSelected?.phoneNumber}}</li>
+                <li class="list-group-item"><i class="fa fa-credit-card float-right"></i><b>Salary:</b>  {{employeeSelected?.salary}} </li>
+                <li class="list-group-item"><i class="fa fa-calendar-check float-right"></i><b>Hire date:</b>  {{employeeSelected?.hireDate | date: 'dd.MM.yyyy'}}</li>
+                <li class="list-group-item"><i class="fa fa-calendar float-right"></i><b>Dismissal date:</b>  {{employeeSelected?.dismissalDate | date: 'dd.MM.yyyy'}}</li>
+                <li class="list-group-item"><i class="fa fa-building float-right"></i><b>Department:</b>  {{employeeDepartmentMap.get(employeeSelected)?.name}}</li>
+                <li class="list-group-item"><i class="fa fa-sitemap float-right"></i><b>Position:</b> {{employeePositionMap.get(employeeSelected)?.name}}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </app-sidebar>
