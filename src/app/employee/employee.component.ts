@@ -27,6 +27,7 @@ export class EmployeeComponent implements OnInit {
   public departments: Department[] = [];
   public positions: Position[] = [];
   public users: User[] = [];
+  public employeeToCreate: Employee = new Employee();
   public employeeToUpdate: Employee = new Employee();
   public employeeToDelete: Employee = new Employee();
   public employeeSelected: Employee = new Employee();
@@ -186,13 +187,43 @@ export class EmployeeComponent implements OnInit {
     });
   }
 
+  public onAddNewEmployee(): void {
+    this.employeeService.addEmployee(this.employeeToCreate).subscribe(
+      (response: Employee) => {
+        this.clickButton('add-new-employee-close-btn');
+        this.getEmployees(false);
+        this.resetData(null);
+        this.showNotification(NotificationType.SUCCESS, `New employee: ${response.firstName} ${response.lastName} was created successfully`);
+      }, (errorResponse: HttpErrorResponse) => {
+        this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+      }
+    );
+  }
+
+  public copyDataFromUser(): void {
+    const userToCopy = this.users.find(user => user.id === this.employeeToCreate.userId);
+    if (userToCopy) {
+      this.employeeToCreate.firstName = userToCopy.firstName;
+      this.employeeToCreate.lastName = userToCopy.lastName;
+      this.employeeToCreate.email = userToCopy.email;
+      this.employeeToCreate.userId = userToCopy.id;
+    }
+
+    this.clickButton('close-copy-data-delete-modal');
+  }
+
   public resetData(ngForm: NgForm | null): void {
+    this.employeeToCreate = new Employee();
     this.employeeSelected = new Employee();
     this.employeeToDelete = new Employee();
     this.employeeToUpdate = new Employee();
     if (ngForm) {
       ngForm.reset();
     }
+  }
+
+  public openCopyDataFromUserModal(): void {
+    this.clickButton('open-copy-data-btn');
   }
 
   private showNotification(notificationType: NotificationType, message: string): void {

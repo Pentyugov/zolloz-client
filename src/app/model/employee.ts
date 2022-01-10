@@ -6,8 +6,8 @@ export class Employee {
   salary: number
   phoneNumber: string;
   email: string;
-  hireDate: Date;
-  dismissalDate: Date;
+  hireDate: Date | null;
+  dismissalDate: Date | null;
   head: boolean
   userId: string;
   positionId: string;
@@ -21,8 +21,8 @@ export class Employee {
     this.salary = 0;
     this.phoneNumber = '';
     this.email = '';
-    this.hireDate = new Date();
-    this.dismissalDate = new Date();
+    this.hireDate = null;
+    this.dismissalDate = null;
     this.head = false;
     this.userId = '';
     this.positionId = '';

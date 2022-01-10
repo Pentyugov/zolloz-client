@@ -9,7 +9,7 @@
             <input name="searchTerm" #searchInput="ngModel" class="form-control mr-sm-2" ngModel (ngModelChange)="search(searchInput.value)"
                    type="search" placeholder="Search employees...">
           </form>
-          <button  type="button" class="btn btn-info" data-toggle="modal" data-target="#addPositionModal"><i class="fa fa-plus"></i>&nbsp;New Employee</button>
+          <button  type="button" class="btn btn-info" data-toggle="modal" data-target="#addEmployeeModal"><i class="fa fa-plus"></i>&nbsp;New Employee</button>
         </div>
         <div class="btn-group">
           <button type="button" class="btn btn-info" (click)="getEmployees(true)">
@@ -54,7 +54,7 @@
   <button [hidden]="true" type="button" id="open-employee-info-btn" data-toggle="modal" data-target="#viewEmployeeModal"></button>
   <button [hidden]="true" type="button" id="open-employee-update-btn" data-toggle="modal" data-target="#updateEmployeeModal"></button>
 
-  <!--    modal delete user-->
+  <!--    modal delete employee-->
   <div class="modal fade" id="deleteEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -75,7 +75,7 @@
     </div>
   </div>
 
-  <!-- modal user info -->
+  <!-- modal employee info -->
   <div class="modal fade bd-example-modal-lg" id="viewEmployeeModal" tabindex="-1" role="dialog" aria-labelledby=""
        aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -112,6 +112,125 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal add employee -->
+  <div class="modal draggable fade bd-example-modal-lg" id="addEmployeeModal" tabindex="-1" role="dialog"
+       aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center">New Employee</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="resetData(newEmployeeForm)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form #newEmployeeForm="ngForm">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="required control-label">First Name&nbsp;</label>
+                    <input type="text" name="firstName" required ngModel class="form-control" [(ngModel)]="employeeToCreate.firstName">
+                  </div>
+                  <div class="form-group">
+                    <label>Middle Name&nbsp;</label>
+                    <input type="text" name="middleName" ngModel class="form-control" [(ngModel)]="employeeToCreate.middleName">
+                  </div>
+                </div>
+                <div class="col-md-6 ml-auto">
+                  <div class="form-group">
+                    <label class="required control-label">Last Name&nbsp;</label>
+                    <input type="text" name="lastName" required ngModel class="form-control" [(ngModel)]="employeeToCreate.lastName">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Email&nbsp;</label>
+                    <input type="text" name="email" ngModel class="form-control" [(ngModel)]="employeeToCreate.email">
+                  </div>
+                  <div class="form-group">
+                    <label class="required control-label">Hire date&nbsp;</label>
+                    <input type="date" required name="hireDate" ngModel class="form-control" [(ngModel)]="employeeToCreate.hireDate">
+                  </div>
+                  <div class="form-group">
+                    <label>Salary&nbsp;</label>
+                    <input type="number" name="salary" ngModel class="form-control" [(ngModel)]="employeeToCreate.salary">
+                  </div>
+                </div>
+                <div class="col-md-6 ml-auto">
+                  <div class="form-group">
+                    <label>Phone number&nbsp;</label>
+                    <input type="text" name="phoneNumber" ngModel class="form-control" [(ngModel)]="employeeToCreate.phoneNumber">
+                  </div>
+                  <div class="form-group">
+                    <label>Dismissal date&nbsp;</label>
+                    <input type="date" name="dismissalDate" ngModel class="form-control" [(ngModel)]="employeeToCreate.dismissalDate">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="required control-label">Department&nbsp;</label>
+                    <select name="departmentId" required class="form-control" [(ngModel)]="employeeToCreate.departmentId">
+                      <option *ngFor="let department of departments" [value]="department.id">{{department.name}}</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>User&nbsp;</label>
+                    <select name="userId" class="form-control" (change)="openCopyDataFromUserModal()" [(ngModel)]="employeeToCreate.userId">
+                      <option *ngFor="let user of users" [value]="user.id">{{user.username}}</option>
+                    </select>
+                  </div>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input type="checkbox" name="head" ngModel class="form-check-input" [(ngModel)]="employeeToCreate.head">Head
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="required control-label">Position&nbsp;</label>
+                    <select name="positionId" required class="form-control" [(ngModel)]="employeeToCreate.positionId">
+                      <option *ngFor="let position of positions" [value]="position.id">{{position.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" style="display: none;" id="add-new-employee-btn"></button>
+              <button [hidden]="true" type="button" id="open-copy-data-btn" data-toggle="modal" data-target="#copyDataFromUserModal"></button>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="add-new-employee-close-btn" (click)="resetData(newEmployeeForm)">Close</button>
+          <button type="button" class="btn btn-primary" (click)="onAddNewEmployee()" [disabled]="newEmployeeForm.invalid">Add new employee</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--    modal copy data from user-->
+  <div class="modal fade" id="copyDataFromUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content" style="background-color: snow">
+        <div class="modal-header">
+          <h5 class="modal-title" id="copyDataFromUserLabel">Copy</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-copy-data-delete-modal">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Copy data from user?</p>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            <button (click)="copyDataFromUser()" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+          </div>
         </div>
       </div>
     </div>
