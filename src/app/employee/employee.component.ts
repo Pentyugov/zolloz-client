@@ -207,6 +207,11 @@ export class EmployeeComponent implements OnInit {
       this.employeeToCreate.lastName = userToCopy.lastName;
       this.employeeToCreate.email = userToCopy.email;
       this.employeeToCreate.userId = userToCopy.id;
+
+      this.employeeToUpdate.firstName = userToCopy.firstName;
+      this.employeeToUpdate.lastName = userToCopy.lastName;
+      this.employeeToUpdate.email = userToCopy.email;
+      this.employeeToUpdate.userId = userToCopy.id;
     }
 
     this.clickButton('close-copy-data-delete-modal');

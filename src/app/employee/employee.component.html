@@ -215,6 +215,105 @@
     </div>
   </div>
 
+
+  <!-- modal update employee -->
+  <div class="modal draggable fade bd-example-modal-lg" id="updateEmployeeModal" tabindex="-1" role="dialog"
+       aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center">Update Employee</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="resetData(updateEmployeeForm)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #updateEmployeeForm="ngForm">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="required control-label">First Name&nbsp;</label>
+                  <input type="text" name="firstName" required ngModel class="form-control" [(ngModel)]="employeeToUpdate.firstName">
+                </div>
+                <div class="form-group">
+                  <label>Middle Name&nbsp;</label>
+                  <input type="text" name="middleName" ngModel class="form-control" [(ngModel)]="employeeToUpdate.middleName">
+                </div>
+              </div>
+              <div class="col-md-6 ml-auto">
+                <div class="form-group">
+                  <label class="required control-label">Last Name&nbsp;</label>
+                  <input type="text" name="lastName" required ngModel class="form-control" [(ngModel)]="employeeToUpdate.lastName">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Email&nbsp;</label>
+                  <input type="text" name="email" ngModel class="form-control" [(ngModel)]="employeeToUpdate.email">
+                </div>
+                <div class="form-group">
+                  <label class="required control-label">Hire date&nbsp;</label>
+                  <input type="date" required name="hireDate" ngModel class="form-control" [(ngModel)]="employeeToUpdate.hireDate" value="{{employeeToUpdate.hireDate | date: 'dd.MM.yyyy'}}">
+                </div>
+                <div class="form-group">
+                  <label>Salary&nbsp;</label>
+                  <input type="number" name="salary" ngModel class="form-control" [(ngModel)]="employeeToUpdate.salary">
+                </div>
+              </div>
+              <div class="col-md-6 ml-auto">
+                <div class="form-group">
+                  <label>Phone number&nbsp;</label>
+                  <input type="text" name="phoneNumber" ngModel class="form-control" [(ngModel)]="employeeToUpdate.phoneNumber">
+                </div>
+                <div class="form-group">
+                  <label>Dismissal date&nbsp;</label>
+                  <input type="date" name="dismissalDate" ngModel class="form-control" [(ngModel)]="employeeToUpdate.dismissalDate">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="required control-label">Department&nbsp;</label>
+                  <select name="departmentId" required class="form-control" [(ngModel)]="employeeToUpdate.departmentId">
+                    <option *ngFor="let department of departments" [value]="department.id">{{department.name}}</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>User&nbsp;</label>
+                  <select name="userId" class="form-control" (change)="openCopyDataFromUserModal()" [(ngModel)]="employeeToUpdate.userId">
+                    <option *ngFor="let user of users" [value]="user.id">{{user.username}}</option>
+                  </select>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="checkbox" name="head" ngModel class="form-check-input" [(ngModel)]="employeeToUpdate.head">Head
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="required control-label">Position&nbsp;</label>
+                  <select name="positionId" required class="form-control" [(ngModel)]="employeeToUpdate.positionId">
+                    <option *ngFor="let position of positions" [value]="position.id">{{position.name}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <button type="submit" style="display: none;" id="update-employee-btn"></button>
+            <button [hidden]="true" type="button" id="open-copy-data-btn_2" data-toggle="modal" data-target="#copyDataFromUserModal"></button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="update-employee-close-btn" (click)="resetData(newEmployeeForm)">Close</button>
+          <button type="button" class="btn btn-primary" (click)="onAddNewEmployee()" [disabled]="newEmployeeForm.invalid">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!--    modal copy data from user-->
   <div class="modal fade" id="copyDataFromUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
