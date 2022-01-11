@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ApplicationService} from "../service/application.service";
 import {UserService} from "../service/user.service";
 import {Router} from "@angular/router";
@@ -22,7 +22,7 @@ import {User} from "../model/user";
   styleUrls: ['./employee.component.css']
 })
 export class EmployeeComponent implements OnInit {
-
+  @ViewChild('hireDateInput') hireDateInput: any;
   public employees: Employee[] = [];
   public departments: Department[] = [];
   public positions: Position[] = [];
@@ -31,6 +31,8 @@ export class EmployeeComponent implements OnInit {
   public employeeToUpdate: Employee = new Employee();
   public employeeToDelete: Employee = new Employee();
   public employeeSelected: Employee = new Employee();
+  public hireDate: Date | null = null;
+  public dismissalDate: Date | null = null;
   public employeeDepartmentMap = new Map<Employee, Department>();
   public employeePositionMap = new Map<Employee, Position>();
   public employeeUserMap = new Map<Employee, User>();
@@ -122,7 +124,41 @@ export class EmployeeComponent implements OnInit {
 
   public setEmployeeToUpdate(employee: Employee): void {
     this.employeeToUpdate = this.employeeService.clonePosition(employee);
+    if (this.employeeToUpdate.hireDate) {
+      this.hireDate = new Date(Date.parse(this.employeeToUpdate.hireDate.toString()))
+    }
+
+    if (this.employeeToUpdate.dismissalDate) {
+      this.dismissalDate = new Date(Date.parse(this.employeeToUpdate.dismissalDate.toString()))
+    }
+
     this.clickButton('open-employee-update-btn');
+  }
+
+  public isUpdateEmployeeFormValid(): boolean {
+    return !this.employeeToUpdate.firstName || !this.employeeToUpdate.lastName || !this.hireDate || !this.employeeToUpdate.departmentId;
+
+  }
+
+  public updateHireDate(event: any): void {
+    this.hireDate = new Date(Date.parse(event.target.value))
+    this.employeeToUpdate.hireDate = this.hireDate;
+  }
+
+  public deleteHireDate(): void {
+    this.hireDateInput.nativeElement.value = '';
+    this.hireDate = null;
+    this.employeeToUpdate.hireDate = null;
+  }
+
+  public updateDismissalDate(event: any): void {
+    this.dismissalDate = new Date(Date.parse(event.target.value))
+    this.employeeToUpdate.dismissalDate = this.dismissalDate;
+  }
+
+  public deleteDismissalDate(): void {
+    this.dismissalDate = null;
+    this.employeeToUpdate.dismissalDate = null;
   }
 
   public setEmployeeToDelete(employee: Employee): void {
@@ -200,19 +236,36 @@ export class EmployeeComponent implements OnInit {
     );
   }
 
+  public onUpdateEmployee(): void {
+    this.employeeService.updateEmployee(this.employeeToUpdate).subscribe(
+      (response: Employee) => {
+        this.clickButton('update-employee-close-btn');
+        this.getEmployees(false);
+        this.resetData(null);
+        this.showNotification(NotificationType.SUCCESS, `Employee: ${response.firstName} ${response.lastName} was updated successfully`);
+      }, (errorResponse: HttpErrorResponse) => {
+        this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+      }
+    );
+  }
+
   public copyDataFromUser(): void {
-    const userToCopy = this.users.find(user => user.id === this.employeeToCreate.userId);
+    let userToCopy = this.users.find(user => user.id === this.employeeToCreate.userId);
     if (userToCopy) {
       this.employeeToCreate.firstName = userToCopy.firstName;
       this.employeeToCreate.lastName = userToCopy.lastName;
       this.employeeToCreate.email = userToCopy.email;
       this.employeeToCreate.userId = userToCopy.id;
+    }
 
+    userToCopy = this.users.find(user => user.id === this.employeeToUpdate.userId);
+    if (userToCopy) {
       this.employeeToUpdate.firstName = userToCopy.firstName;
       this.employeeToUpdate.lastName = userToCopy.lastName;
       this.employeeToUpdate.email = userToCopy.email;
       this.employeeToUpdate.userId = userToCopy.id;
     }
+
 
     this.clickButton('close-copy-data-delete-modal');
   }
@@ -222,6 +275,8 @@ export class EmployeeComponent implements OnInit {
     this.employeeSelected = new Employee();
     this.employeeToDelete = new Employee();
     this.employeeToUpdate = new Employee();
+    this.hireDate = null;
+    this.dismissalDate = null;
     if (ngForm) {
       ngForm.reset();
     }
