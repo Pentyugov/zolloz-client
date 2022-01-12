@@ -7,15 +7,21 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {NoteService} from "../service/note.service";
 import {NotificationService} from "../service/notification.service";
 import {Note} from "../model/note";
+import {MatPaginator} from "@angular/material/paginator";
+import {Notification} from "../model/notification";
+import {CustomHttpResponse} from "../model/custom-http-response";
+
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+  styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent implements OnInit {
-  @ViewChild(MatSidenav)
-  sidenav!: MatSidenav;
+  public notifications: Notification[] = [];
+  public notificationPage = 0;
+  @ViewChild(MatSidenav) sidenav!: MatSidenav;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   public noteToCreate: Note = new Note();
 
@@ -25,6 +31,15 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadNotificationPage();
+  }
+
+  public loadNotificationPage(page: number = 0) {
+    this.notificationService.getNotificationPageForCurrentUser(page).subscribe(
+      (response: Notification[]) => {
+        this.notifications = response;
+      }
+    )
   }
 
   public onAddNote(noteForm: NgForm): void {
@@ -57,5 +72,34 @@ export class SidebarComponent implements OnInit {
   public resetData(ngForm: NgForm): void {
     this.noteToCreate = new Note();
     ngForm.reset();
+  }
+
+  public nextNotificationPage(): void {
+    this.notificationPage = this.notificationPage + 1;
+    this.loadNotificationPage(this.notificationPage);
+  }
+
+  public prevNotificationPage(): void {
+    this.notificationPage = this.notificationPage - 1;
+    if (this.notificationPage < 0) {
+      this.notificationPage = 0;
+    }
+    this.loadNotificationPage(this.notificationPage);
+  }
+
+  public isNextBtnDisabled(): boolean {
+    return this.notifications.length < 5;
+  }
+
+  public isPrevBtnDisabled(): boolean {
+    return  this.notificationPage <= 0;
+  }
+
+  public onDeleteNotification(id: string): void {
+    this.notificationService.deleteNotification(id).subscribe(
+      () => {
+        this.loadNotificationPage(this.notificationPage)
+      }
+    );
   }
 }

@@ -1,8 +1,11 @@
 <div class="d-flex" id="wrapper">
-  <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;" id="sidebar-wrapper">
-    <div class="sidebar-heading">Fast actions</div>
-    <hr>
-      <ul class="nav nav-pills flex-column mb-auto">
+  <div class="flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;" id="sidebar-wrapper">
+
+    <div class="nav nav-pills flex-column mb-auto">
+
+      <div class="sidebar-heading">Fast actions</div>
+      <hr>
+      <ul class="nav nav-pills">
         <li class="nav-item">
           <button type="button" class="btn btn-link" data-toggle="modal" data-target="#addNoteModal"><i class="far fa-edit"></i>Create note</button>
         </li>
@@ -19,13 +22,45 @@
           <button type="button" class="btn btn-link"><i class="fas fa-archive"></i>&nbsp;Archive</button>
         </li>
       </ul>
+    </div>
+
+    <hr>
+    <div class="sidebar-heading">Notifications</div>
+    <div>
+      <div *ngFor="let notification of notifications">
+        <div class="alert" [ngClass]="{'alert-success' : notification.type === 10,
+                                       'alert-info': notification.type === 20,
+                                       'alert-warning': notification.type === 30,
+                                       'alert-danger': notification.type === 40}">
+          <button type="button" class="close" aria-hidden="true" (click)="onDeleteNotification(notification.id)">×</button>
+          <strong class="default">{{notification.title}}</strong><br>
+          {{notification.message}}
+        </div>
+      </div>
+    </div>
+
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [ngClass]="{'disabled': isPrevBtnDisabled()}">
+          <button class="page-link" (click)="prevNotificationPage()">Prev</button>
+        </li>
+        <li class="page-item" [ngClass]="{'disabled': isNextBtnDisabled()}">
+          <button class="page-link" (click)="nextNotificationPage()" [disabled]="isNextBtnDisabled()">Next</button>
+        </li>
+      </ul>
+    </nav>
+
   </div>
+
+
   <div id="page-content-wrapper">
     <div class="container-fluid">
       <app-navigation></app-navigation>
       <ng-content></ng-content>
     </div>
   </div>
+
 
   <!-- modal add note -->
   <div class="modal draggable fade bd-example-modal-lg" id="addNoteModal" tabindex="-1" role="dialog"

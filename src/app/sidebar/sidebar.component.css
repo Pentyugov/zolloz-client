@@ -44,4 +44,9 @@ body {
   }
 }
 
-
+.panel-default > .panel-heading {
+  color: #333;
+  background-color: #fcfcfc;
+  border-color: #ddd;
+  border-color: rgba(221,221,221,0.85);
+}
