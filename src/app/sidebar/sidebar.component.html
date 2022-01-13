@@ -27,6 +27,7 @@
     <hr>
     <div class="sidebar-heading">Notifications</div>
     <div>
+
       <div *ngFor="let notification of notifications">
         <div class="alert" [ngClass]="{'alert-success' : notification.type === 10,
                                        'alert-info': notification.type === 20,

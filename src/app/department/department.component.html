@@ -26,7 +26,7 @@
               </div>
               <table class="table table-hover">
                 <thead class="table-borderless">
-                <tr class="text-center">
+                <tr class="text-center active">
                   <th>Name</th>
                   <th>Code</th>
                   <th>Head</th>
@@ -189,22 +189,35 @@
             <span>{{departmentSelected.name}}</span>
           </div>
           <div><i class="fa fa-user"></i>&nbsp;Head of department:
-            <span>Ivanov I.I.</span>
+            <span>{{headOfDepartmentEmployee.lastName}} {{headOfDepartmentEmployee.firstName}}</span>
           </div>
           <div><i class="fa fa-phone"></i>&nbsp;Phone:
-            <span>8-800-000-00-00</span>
+            <span>{{headOfDepartmentEmployee.phoneNumber}}</span>
           </div>
             <div class="text-muted">
-              <small>Employees count: 11</small>
+              <small>Employees count: {{employees.length}}</small>
             </div>
         </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item"></li>
-              <li class="list-group-item"><i class="fa fa-id-badge float-right"></i></li>
-              <li class="list-group-item"><i class="fa fa-envelope float-right"></i></li>
-              <li class="list-group-item"><i class="fas fa-shield-alt float-right"></i></li>
-              <li class="list-group-item"><i class="fas fa-sign-in-alt float-right"></i></li>
-            </ul>
+          <table class="table table-hover">
+            <thead class="table-borderless">
+            <tr class="text-center">
+              <th>First name</th>
+              <th>Last name</th>
+              <th>Email</th>
+              <th>Head</th>
+            </tr>
+            </thead>
+            <tbody *ngFor="let employee of employees">
+            <tr class="text-center">
+              <td>{{employee?.firstName}}</td>
+              <td>{{employee?.lastName}}</td>
+              <td>{{employee?.email}}</td>
+              <td><input name="head" type="checkbox" disabled [(ngModel)]="employee.head" class="form-check-input"></td>
+              <td>
+              </td>
+            </tr>
+            </tbody>
+          </table>
       </div>
       </div>
     </div>

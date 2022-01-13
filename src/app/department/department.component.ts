@@ -11,6 +11,8 @@ import {DepartmentService} from "../service/department.service";
 import {NgForm} from "@angular/forms";
 import {HttpErrorResponse} from "@angular/common/http";
 import {CustomHttpResponse} from "../model/custom-http-response";
+import {Employee} from "../model/employee";
+import {EmployeeService} from "../service/employee.service";
 
 @Component({
   selector: 'app-department',
@@ -24,6 +26,8 @@ export class DepartmentComponent implements OnInit {
   public departmentToDelete: Department = new Department();
   public departmentSelected: Department = new Department();
   public departmentToCreate: Department = new Department();
+  public employees: Employee[] = [];
+  public headOfDepartmentEmployee: Employee = new Employee();
   public selectedParentDepartment: Department | null = new Department();
   public parentDepartments: Department[] = [];
 
@@ -37,12 +41,14 @@ export class DepartmentComponent implements OnInit {
               private notificationService: NotificationService,
               private authenticationService: AuthenticationService,
               private applicationService: ApplicationService,
-              private departmentService: DepartmentService) {
+              private departmentService: DepartmentService,
+              private employeeService: EmployeeService) {
     this.applicationService.setActiveTab(TabName.DEPARTMENTS);
   }
 
   ngOnInit(): void {
     this.getDepartments(true);
+    this.getEmployees(false);
   }
 
   public getDepartments(showNotification: boolean): void {
@@ -55,6 +61,21 @@ export class DepartmentComponent implements OnInit {
           this.showNotification(NotificationType.SUCCESS, `${response.length} departments(s) loaded successfully.`)
         }
       },(errorResponse: HttpErrorResponse) => {
+        this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+      });
+    this.refreshing = false;
+  }
+
+  public getEmployees(showNotification: boolean): void {
+    this.refreshing = true;
+    this.employeeService.getEmployees().subscribe(
+      (response: Employee[]) => {
+        this.employeeService.addEmployeesToLocalCache(response);
+        this.employees = this.employeeService.getEmployeesFromLocalCache();
+        if (showNotification) {
+          this.showNotification(NotificationType.SUCCESS, `${response.length} employees(s) loaded successfully.`)
+        }
+      }, (errorResponse: HttpErrorResponse) => {
         this.showNotification(NotificationType.ERROR, errorResponse.error.message);
       });
     this.refreshing = false;
@@ -109,6 +130,18 @@ export class DepartmentComponent implements OnInit {
 
   public showDepartmentInfo(): void {
     this.showInfo = true;
+    this.headOfDepartmentEmployee = new Employee();
+    let employeeByDepartment = [];
+    for (let employee of this.employeeService.getEmployeesFromLocalCache()) {
+      if (employee.departmentId === this.departmentSelected.id) {
+        employeeByDepartment.push(employee);
+        if (employee.head) {
+          this.headOfDepartmentEmployee = employee;
+        }
+      }
+    }
+
+    this.employees = employeeByDepartment;
   }
 
   public search(searchTerm: string): void {
