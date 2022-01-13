@@ -38,135 +38,54 @@
           <div class="col-sm-12 tasks">
             <div class="task-list">
 
-              <div class="priority high"><span>high priority</span></div>
-<!--              task starts-->
-              <div class="task high">
-                <div class="desc">
-                  <div class="title">Lorem Ipsum</div>
-                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
-                </div>
-                <div class="time">
-                  <div class="date">Jun 1, 2012</div>
-                  <div> 1 day</div>
-                </div>
-<!--              task ends-->
-              </div>
-              <div class="task high">
-                <div class="desc">
-                  <div class="title">Lorem Ipsum</div>
-                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
-                </div>
-                <div class="time">
-                  <div class="date">Jun 1, 2012</div>
-                  <div>1 day</div>
-                </div>
-              </div>
-              <div class="task high">
-                <div class="desc">
-                  <div class="title">Lorem Ipsum</div>
-                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
-                </div>
-                <div class="time">
-                  <div class="date">Jun 1, 2012</div>
-                  <div> 1 day</div>
-                </div>
-              </div>
-              <div class="task high last">
-                <div class="desc">
-                  <div class="title">Lorem Ipsum</div>
-                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
-                </div>
-                <div class="time">
-                  <div class="date">Jun 1, 2012</div>
-                  <div>1 day</div>
+              <div id="high-priority-tasks" *ngIf="highPriorityTasks.length > 0">
+                <div class="priority high"><span>high priority</span></div>
+                <div id="high-priority-task" *ngFor="let task of highPriorityTasks">
+                  <div class="task high">
+                    <div class="desc">
+                      <div class="title">Task No: {{task.number}}, State: {{task.state}}, Initiator </div>
+                      <div>{{task.description}}</div>
+                    </div>
+                    <div class="time">
+                      <div class="date">Due date: {{task.executionDatePlan | date: 'MMM d, yyyy'}}</div>
+                      <div> 1 day</div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div class="priority medium"><span>medium priority</span></div>
-
-              <div class="task medium">
-                <div class="desc">
-                  <div class="title">Lorem Ipsum</div>
-                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
+              <div id="medium-priority-tasks" *ngIf="mediumPriorityTasks.length > 0">
+                <div class="priority medium"><span>medium priority</span></div>
+                <div id="medium-priority-task" *ngFor="let task of mediumPriorityTasks">
+                <div class="task medium">
+                  <div class="desc">
+                    <div class="title">Task No: {{task.number}}, State: {{task.state}}, Initiator </div>
+                    <div>{{task.description}}</div>
+                  </div>
+                  <div class="time">
+                    <div class="date">Due date: {{task.executionDatePlan | date: 'MMM d, yyyy'}}</div>
+                    <div> 1 day</div>
+                  </div>
                 </div>
-                <div class="time">
-                  <div class="date">Jun 1, 2012</div>
-                  <div> 1 day</div>
-                </div>
-              </div>
-              <div class="task medium last">
-                <div class="desc">
-                  <div class="title">Lorem Ipsum</div>
-                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
-                </div>
-                <div class="time">
-                  <div class="date">Jun 1, 2012</div>
-                  <div> 1 day</div>
                 </div>
               </div>
 
-              <div class="priority low"><span>low priority</span></div>
+              <div id="low-priority-tasks" *ngIf="lowPriorityTasks.length > 0">
+                <div class="priority low"><span>low priority</span></div>
+                <div id="low-priority-task" *ngFor="let task of lowPriorityTasks">
+                  <div class="task low">
+                    <div class="desc">
+                      <div class="title">Task No: {{task.number}}, State: {{task.state}}, Initiator </div>
+                      <div>{{task.description}}</div>
+                    </div>
+                    <div class="time">
+                      <div class="date">Due date: {{task.executionDatePlan | date: 'MMM d, yyyy'}}</div>
+                      <div> 1 day</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-              <div class="task low">
-                <div class="desc">
-                  <div class="title">Lorem Ipsum</div>
-                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
-                </div>
-                <div class="time">
-                  <div class="date">Jun 1, 2012</div>
-                  <div> 1 day</div>
-                </div>
-              </div>
-              <div class="task low">
-                <div class="desc">
-                  <div class="title">Lorem Ipsum</div>
-                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
-                </div>
-                <div class="time">
-                  <div class="date">Jun 1, 2012</div>
-                  <div> 1 day</div>
-                </div>
-              </div>
-              <div class="task low">
-                <div class="desc">
-                  <div class="title">Lorem Ipsum</div>
-                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
-                </div>
-                <div class="time">
-                  <div class="date">Jun 1, 2012</div>
-                  <div> 1 day</div>
-                </div>
-              </div>
-              <div class="task low">
-                <div class="desc">
-                  <div class="title">Lorem Ipsum</div>
-                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
-                </div>
-                <div class="time">
-                  <div class="date">Jun 1, 2012</div>
-                  <div> 1 day</div>
-                </div>
-              </div>
-              <div class="task low">
-                <div class="desc">
-                  <div class="title">Lorem Ipsum</div>
-                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
-                </div>
-                <div class="time">
-                  <div class="date">Jun 1, 2012</div>
-                  <div> 1 day</div>
-                </div>
-              </div>
-              <div class="task low">
-                <div class="desc">
-                  <div class="title">Lorem Ipsum</div>
-                  <div>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</div>
-                </div>
-                <div class="time">
-                  <div class="date">Jun 1, 2012</div>
-                  <div> 1 day</div>
-                </div>
-              </div>
               <div class="clearfix"></div>
             </div>
           </div>

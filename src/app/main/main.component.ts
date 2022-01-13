@@ -10,6 +10,8 @@ import {User} from "../model/user";
 import {HttpErrorResponse} from "@angular/common/http";
 import {CustomHttpResponse} from "../model/custom-http-response";
 import {NgForm} from "@angular/forms";
+import {Task} from "../model/task";
+import {TaskService} from "../service/task.service";
 
 @Component({
   selector: 'app-main',
@@ -19,18 +21,23 @@ import {NgForm} from "@angular/forms";
 export class MainComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[];
   public notes: Note[] = [];
+  public lowPriorityTasks: Task[] = [];
+  public mediumPriorityTasks: Task[] = [];
+  public highPriorityTasks: Task[] = [];
   public noteToDelete: Note;
   public noteToUpdate: Note = new Note();
 
   constructor(private applicationService: ApplicationService,
               private noteService: NoteService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private taskService: TaskService) {
     this.subscriptions = [];
     this.applicationService.setActiveTab(TabName.MAIN);
   }
 
   ngOnInit(): void {
     this.getNotes(false);
+    this.getTasks();
   }
 
   ngOnDestroy(): void {
@@ -53,6 +60,29 @@ export class MainComponent implements OnInit, OnDestroy {
           this.showNotification(NotificationType.ERROR, errorResponse.error.message);
         })
     );
+  }
+
+  public getTasks(): void {
+    this.taskService.getPriorityTaskForUser(Task.PRIORITY_LOW).subscribe(
+      (response: Task[]) => {
+        this.lowPriorityTasks = response;
+      }
+    );
+    this.taskService.getPriorityTaskForUser(Task.PRIORITY_MEDIUM).subscribe(
+      (response: Task[]) => {
+        this.mediumPriorityTasks = response;
+      }
+    );
+    this.taskService.getPriorityTaskForUser(Task.PRIORITY_HIGH).subscribe(
+      (response: Task[]) => {
+        this.highPriorityTasks = response;
+      }
+    );
+
+  }
+
+  public getUserName(): void {
+    console.log('test ')
   }
 
   public setNoteToDelete(note: Note): void {
