@@ -63,17 +63,17 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   public getTasks(): void {
-    this.taskService.getPriorityTaskForUser(Task.PRIORITY_LOW).subscribe(
+    this.taskService.getTasksWhereCurrentUserExecutor(Task.PRIORITY_LOW).subscribe(
       (response: Task[]) => {
         this.lowPriorityTasks = response;
       }
     );
-    this.taskService.getPriorityTaskForUser(Task.PRIORITY_MEDIUM).subscribe(
+    this.taskService.getTasksWhereCurrentUserExecutor(Task.PRIORITY_MEDIUM).subscribe(
       (response: Task[]) => {
         this.mediumPriorityTasks = response;
       }
     );
-    this.taskService.getPriorityTaskForUser(Task.PRIORITY_HIGH).subscribe(
+    this.taskService.getTasksWhereCurrentUserExecutor(Task.PRIORITY_HIGH).subscribe(
       (response: Task[]) => {
         this.highPriorityTasks = response;
       }

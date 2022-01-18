@@ -1,3 +1,5 @@
+import {User} from "./user";
+
 export class Task {
   static PRIORITY_LOW: number = 10;
   static PRIORITY_MEDIUM: number = 20;
@@ -11,9 +13,10 @@ export class Task {
   state: string
   executionDatePlan: Date | null;
   executionDateFact: Date | null;
-  creatorId: string
-  executorId: string
-  initiatorId: string
+  creator: User;
+  executor: User;
+  initiator: User;
+  daysUntilDueDate: number
 
 
   constructor() {
@@ -25,8 +28,9 @@ export class Task {
     this.state = '';
     this.executionDatePlan = null;
     this.executionDateFact = null;
-    this.creatorId = '';
-    this.executorId = '';
-    this.initiatorId = '';
+    this.creator = new User();
+    this.executor = new User();
+    this.initiator = new User();
+    this.daysUntilDueDate = 0;
   }
 }

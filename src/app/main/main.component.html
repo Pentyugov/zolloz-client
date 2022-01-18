@@ -2,7 +2,7 @@
 <app-sidebar>
   <div class="row">
 
-        <div class="col-lg-5 col-1">
+        <div class="col-lg-6 col-1">
           <div class="row">
             <div class="container">
               <h1 class="text-secondary">My notes</h1>
@@ -43,12 +43,12 @@
                 <div id="high-priority-task" *ngFor="let task of highPriorityTasks">
                   <div class="task high">
                     <div class="desc">
-                      <div class="title">Task No: {{task.number}}, State: {{task.state}}, Initiator </div>
+                      <div class="title">Task No: {{task.number}}, Initiator: {{task.initiator?.username}}</div>
                       <div>{{task.description}}</div>
                     </div>
                     <div class="time">
                       <div class="date">Due date: {{task.executionDatePlan | date: 'MMM d, yyyy'}}</div>
-                      <div> 1 day</div>
+                      <div> {{task.daysUntilDueDate > 0 ? task.daysUntilDueDate : (task.daysUntilDueDate < 0 ? 'Overdue': 'Today')}}</div>
                     </div>
                   </div>
                 </div>
@@ -59,12 +59,12 @@
                 <div id="medium-priority-task" *ngFor="let task of mediumPriorityTasks">
                 <div class="task medium">
                   <div class="desc">
-                    <div class="title">Task No: {{task.number}}, State: {{task.state}}, Initiator </div>
+                    <div class="title">Task No: {{task.number}}, Initiator: {{task.initiator?.username}}</div>
                     <div>{{task.description}}</div>
                   </div>
                   <div class="time">
                     <div class="date">Due date: {{task.executionDatePlan | date: 'MMM d, yyyy'}}</div>
-                    <div> 1 day</div>
+                    <div> {{task.daysUntilDueDate > 0 ? task.daysUntilDueDate : (task.daysUntilDueDate < 0 ? 'Overdue': 'Today')}}</div>
                   </div>
                 </div>
                 </div>
@@ -75,12 +75,13 @@
                 <div id="low-priority-task" *ngFor="let task of lowPriorityTasks">
                   <div class="task low">
                     <div class="desc">
-                      <div class="title">Task No: {{task.number}}, State: {{task.state}}, Initiator </div>
+                      <div class="title">Task No: {{task.number}}, Initiator: {{task.initiator?.username}}</div>
                       <div>{{task.description}}</div>
                     </div>
                     <div class="time">
                       <div class="date">Due date: {{task.executionDatePlan | date: 'MMM d, yyyy'}}</div>
-                      <div> 1 day</div>
+                      <div> {{task.daysUntilDueDate > 0 ? 'Days left: ' + task.daysUntilDueDate :
+                        (task.daysUntilDueDate < 0 ? 'Overdue': 'Today')}}</div>
                     </div>
                   </div>
                 </div>

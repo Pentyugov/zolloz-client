@@ -9,7 +9,6 @@ import {NotificationService} from "../service/notification.service";
 import {Note} from "../model/note";
 import {MatPaginator} from "@angular/material/paginator";
 import {Notification} from "../model/notification";
-import {CustomHttpResponse} from "../model/custom-http-response";
 
 
 @Component({

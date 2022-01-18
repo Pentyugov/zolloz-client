@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
@@ -27,7 +27,32 @@ export class TaskService {
     return this.httpClient.get<Task[]>(`${this.host}/task/get-tasks-with-priority/${priority}`);
   }
 
+  public getTasksWhereCurrentUserExecutor(priority: number): Observable<Task[]> {
+    return this.httpClient.get<Task[]>(`${this.host}/task/get-tasks-current-user-executor-by-priority/${priority}`);
+  }
+
+  public getTasksPageForCurrentUser(page: number): Observable<Task[]> {
+    return this.httpClient.get<Task[]>(`${this.host}/task/get-task-page-for-current-user?page=${page}`);
+  }
+
   public deleteTask(id: string): Observable<CustomHttpResponse> {
     return this.httpClient.delete<CustomHttpResponse>(`${this.host}/task/delete-note/${id}`);
+  }
+
+  cloneTask(taskToClone: Task) {
+    let task = new Task();
+    task.id = taskToClone.id;
+    task.priority = taskToClone.priority;
+    task.number = taskToClone.number;
+    task.description = taskToClone.description;
+    task.comment = taskToClone.comment;
+    task.state = taskToClone.state;
+    task.executionDatePlan = taskToClone.executionDatePlan;
+    task.executionDateFact = taskToClone.executionDateFact;
+    task.creator = taskToClone.creator;
+    task.executor = taskToClone.executor;
+    task.initiator = taskToClone.initiator;
+    task.daysUntilDueDate = taskToClone.daysUntilDueDate;
+    return task;
   }
 }
