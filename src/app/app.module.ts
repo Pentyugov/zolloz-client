@@ -7,7 +7,7 @@ import {AuthenticationService} from "./service/authentication.service";
 import {UserService} from "./service/user.service";
 import {AuthInterceptor} from "./interceptor/auth.interceptor";
 import {AuthenticationGuard} from "./guard/authentication.guard";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NotificationModule} from "./notification.module";
 import {NotificationService} from "./service/notification.service";
 import { LoginComponent } from './login/login.component';
@@ -25,6 +25,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import {ScrollingModule} from "@angular/cdk/scrolling";
 import { EmployeeComponent } from './employee/employee.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 
 @NgModule({
   declarations: [
@@ -42,16 +44,19 @@ import { EmployeeComponent } from './employee/employee.component';
     SidebarComponent,
     EmployeeComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        MaterialModule,
-        FormsModule,
-        HttpClientModule,
-        NotificationModule,
-        BrowserAnimationsModule,
-        ScrollingModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    MaterialModule,
+    FormsModule,
+    HttpClientModule,
+    NotificationModule,
+    BrowserAnimationsModule,
+    ScrollingModule,
+    AngularMultiSelectModule,
+    NgMultiSelectDropDownModule.forRoot(),
+    ReactiveFormsModule
+  ],
   providers: [NotificationService, AuthenticationGuard, AuthenticationService, UserService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]

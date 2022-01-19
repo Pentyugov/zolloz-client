@@ -8,6 +8,8 @@ import {TaskService} from "../service/task.service";
 import {Task} from "../model/task";
 import {NgForm} from "@angular/forms";
 import {User} from "../model/user";
+import {NotificationType} from "../enum/notification-type.enum";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-task',
@@ -17,6 +19,7 @@ import {User} from "../model/user";
 export class TaskComponent implements OnInit {
   public tasks: Task[] = [];
   public executors: User[] = [];
+  public executorId: string = '';
   public taskSelected: Task = new Task();
   public taskToCreate: Task = new Task();
   public taskToUpdate: Task = new Task();
@@ -40,7 +43,7 @@ export class TaskComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTasks();
-    this.getExecutors()
+    this.getExecutors();
   }
 
   public getTasks(page: number = 0): void {
@@ -140,15 +143,48 @@ export class TaskComponent implements OnInit {
     return this.tasks.length < 5 || this.nextTaskPage.length === 0;
   }
 
-  public resetData(ngForm: NgForm): void {
+  public resetData(ngForm: NgForm | null): void {
+  this.taskSelected = new Task();
+  this.taskToCreate = new Task();
+  this.taskToUpdate = new Task();
+  this.taskToDelete = new Task();
+  if (ngForm) {
     ngForm.reset();
   }
+  }
 
-  onAddNewTask(newTaskForm: NgForm) {
+  public onAddNewTask() {
+    for (let executor of this.executors) {
+      if (executor.id === this.executorId) {
+        this.taskToCreate.executor = new User();
+        this.taskToCreate.executor.id = this.executorId;
+      }
+    }
+    if (this.taskToCreate.executor) {
+      this.taskService.addTask(this.taskToCreate).subscribe(
+        (response: Task) => {
+          this.clickButton('add-new-task-close-btn');
+          this.getTasks();
+          this.resetData(null);
+          this.showNotification(NotificationType.SUCCESS, `New task: ${response.number} was created successfully`);
+        }, (errorResponse: HttpErrorResponse) => {
+          this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+        });
+    } else {
+      this.showNotification(NotificationType.ERROR, `Executor with id: ${this.executorId} not found`);
+    }
 
   }
 
-  addNewTaskButtonAction() {
+  public startTask() {
 
+  }
+
+  private showNotification(notificationType: NotificationType, message: string): void {
+    if (message) {
+      this.notificationService.notify(notificationType, message);
+    } else {
+      this.notificationService.notify(notificationType, 'An error occurred. Please try again.');
+    }
   }
 }

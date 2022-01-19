@@ -13,10 +13,11 @@ export class Task {
   state: string
   executionDatePlan: Date | null;
   executionDateFact: Date | null;
-  creator: User;
-  executor: User;
-  initiator: User;
+  creator: User | null;
+  executor: User | null;
+  initiator: User | null;
   daysUntilDueDate: number
+  started: boolean;
 
 
   constructor() {
@@ -28,9 +29,10 @@ export class Task {
     this.state = '';
     this.executionDatePlan = null;
     this.executionDateFact = null;
-    this.creator = new User();
-    this.executor = new User();
-    this.initiator = new User();
+    this.creator = null;
+    this.executor = null;
+    this.initiator = null;
     this.daysUntilDueDate = 0;
+    this.started = false;
   }
 }

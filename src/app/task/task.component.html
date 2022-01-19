@@ -98,7 +98,7 @@
               </div>
               <div class="col-md-6 ml-auto">
                 <div class="form-group">
-                  <label class="required control-label">State&nbsp;</label>
+                  <label class="required control-label">Priority&nbsp;</label>
                   <select name="userId" class="form-control" [(ngModel)]="taskToCreate.priority">
                     <option value="10" selected>Low</option>
                     <option value="20" selected>Medium</option>
@@ -126,10 +126,12 @@
                   <label class="required control-label">Due date&nbsp;</label>
                   <input type="date" required name="hireDate" ngModel class="form-control" [(ngModel)]="taskToCreate.executionDatePlan">
                 </div>
+              </div>
+              <div class="col-md-6 ml-auto">
                 <div class="form-group">
                   <label>Executor&nbsp;</label>
-                  <select name="executor" class="form-control" [(ngModel)]="taskToCreate.executor">
-                    <option [value]="taskToCreate.executor" *ngFor="let executor of executors">{{executor.username}}</option>
+                  <select name="executor" class="form-control" [(ngModel)]="executorId">
+                    <option [value]="executor.id" *ngFor="let executor of executors">{{executor.username}}</option>
                   </select>
                 </div>
               </div>
@@ -140,13 +142,13 @@
               <div class="col-md-6">
               </div>
             </div>
-            <button type="submit" style="display: none;" id="add-new-employee-btn"></button>
-            <button [hidden]="true" type="button" id="open-copy-data-btn" data-toggle="modal" data-target="#copyDataFromUserModal"></button>
+            <button type="submit" style="display: none;" id="add-new-task-btn"></button>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="add-new-position-close-btn" (click)="resetData(newTaskForm)">Close</button>
-          <button type="button" class="btn btn-primary" (click)="addNewTaskButtonAction()" [disabled]="newTaskForm.invalid">Add new position</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="add-new-task-close-btn" (click)="resetData(newTaskForm)">Close</button>
+          <button type="button" class="btn btn-primary" (click)="onAddNewTask()" [disabled]="newTaskForm.invalid">Save task</button>
+          <button type="button" class="btn btn-success" (click)="startTask()" [disabled]="newTaskForm.invalid">Start task</button>
         </div>
       </div>
     </div>
