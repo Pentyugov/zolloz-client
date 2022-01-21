@@ -12,6 +12,9 @@ import {CustomHttpResponse} from "../model/custom-http-response";
 import {Router} from "@angular/router";
 import {ApplicationService} from "../service/application.service";
 import {TabName} from "../enum/tab-name.enum";
+import {IDropdownSettings} from "ng-multiselect-dropdown";
+import {Role} from "../model/role";
+import {RoleService} from "../service/role.service";
 
 @Component({
   selector: 'app-user',
@@ -32,13 +35,11 @@ export class UserComponent implements OnInit, OnDestroy {
   public userToDelete: User;
 
   public users: User[] = [];
+  public roles: Role[] = [];
+  public userRoles: Role[] = [];
   public refreshing = false;
 
-  public menuTopLeftPosition =
-    {
-      x: '0',
-      y: '0'
-    }
+  dropdownSettings:IDropdownSettings={};
 
   @ViewChild(MatMenuTrigger, {static: true}) matMenuTrigger?: MatMenuTrigger;
 
@@ -46,7 +47,8 @@ export class UserComponent implements OnInit, OnDestroy {
               private router: Router,
               private notificationService: NotificationService,
               private authenticationService: AuthenticationService,
-              private applicationService: ApplicationService) {
+              private applicationService: ApplicationService,
+              private roleService: RoleService) {
     this.titleSubject = new BehaviorSubject<string>('Users');
     this.titleAction$ = this.titleSubject.asObservable();
     this.subscriptions = [];
@@ -63,7 +65,13 @@ export class UserComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getUsers(true);
+    this.getRoles();
     this.currentUser = this.authenticationService.getUserFromLocalCache();
+
+    this.dropdownSettings = {
+      idField: 'id',
+      textField: 'name',
+    };
   }
 
   ngOnDestroy(): void {
@@ -85,18 +93,12 @@ export class UserComponent implements OnInit, OnDestroy {
     this.refreshing = false;
   }
 
-  public changeTitle(title: string): void {
-    this.titleSubject.next(title);
-  }
-
-  onRightClick(event: MouseEvent, item: any) {
-    if (this.matMenuTrigger) {
-      event.preventDefault();
-      this.menuTopLeftPosition.x = event.clientX + 'px';
-      this.menuTopLeftPosition.y = event.clientY + 'px';
-      this.matMenuTrigger.menuData = {item: item}
-      this.matMenuTrigger.openMenu();
-    }
+  public getRoles(): void {
+    this.roleService.getRoles().subscribe(
+      (response: Role[]) => {
+        this.roles = response;
+      }
+    )
   }
 
   public onSelectUser(selectedUser: User): void {
@@ -118,7 +120,9 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   public onAddNewUser(userForm: NgForm): void {
-    const formData = this.userService.createUserFormData(userForm.value, this.newUserProfileImage);
+    let userToCreate: User = userForm.value;
+    userToCreate.roles = this.userRoles;
+    const formData = this.userService.createUserFormData(userToCreate, this.newUserProfileImage);
     this.subscriptions.push(
       this.userService.addUser(formData).subscribe((response: User) => {
         this.clickButton('add-new-user-close-btn');
@@ -132,8 +136,8 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   public onUpdateUser():void {
+    this.editedUser.roles = this.userRoles;
     const formData = this.userService.createUserFormData(this.editedUser, this.newUserProfileImage);
-    this.subscriptions.push(
       this.userService.updateUser(formData).subscribe((response: User) => {
         this.clickButton('close-edit-user-modal-btn');
         this.getUsers(false);
@@ -141,8 +145,7 @@ export class UserComponent implements OnInit, OnDestroy {
         this.showNotification(NotificationType.SUCCESS, `User: ${response.username} was updated successfully`);
       }, (errorResponse: HttpErrorResponse) => {
         this.showNotification(NotificationType.ERROR, errorResponse.error.message);
-      })
-    );
+      });
   }
 
   public onDeleteUser(userId: string): void {
@@ -164,6 +167,7 @@ export class UserComponent implements OnInit, OnDestroy {
 
   public onEditUser(editedUser: User): void {
     this.editedUser = this.userService.cloneUser(editedUser);
+    this.userRoles = this.editedUser.roles;
     this.clickButton('open-user-edit-btn');
   }
 
@@ -184,12 +188,44 @@ export class UserComponent implements OnInit, OnDestroy {
     }
   }
 
+  public onItemSelect(item: any) {
+    let add = true;
+    for (let role of this.userRoles) {
+      if (role.id === item.id) {
+        add = false;
+        break;
+      }
+    }
+    if (add) {
+      this.userRoles.push(item);
+    }
+  }
+
+  public onItemDeSelect(item: any) {
+    let tmp = [];
+    for (let role of this.userRoles) {
+      if (role.id !== item.id) {
+        tmp.push(role);
+      }
+    }
+    this.userRoles = tmp;
+  }
+
+  public onDeselectAllItems(items: any) {
+    this.userRoles = [];
+  }
+
+  public onSelectAllItems(items: any) {
+    this.userRoles = this.roles;
+  }
+
   public resetData(userForm: NgForm | null): void {
     this.newUserFilename = null;
     this.newUserProfileImage = null;
     this.selectedUser = new User();
     this.userToDelete = new User();
     this.editedUser = new User();
+    this.userRoles = [];
     if (userForm) {
       userForm.reset();
     }

@@ -5,5 +5,6 @@ export enum TabName {
   DEPARTMENTS = 'Departments',
   POSITIONS = 'Positions',
   SETTINGS = 'Settings',
-  PROFILE = 'Profile'
+  PROFILE = 'Profile',
+  ROLE = 'Roles',
 }

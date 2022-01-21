@@ -10,6 +10,8 @@ import {NgForm} from "@angular/forms";
 import {User} from "../model/user";
 import {NotificationType} from "../enum/notification-type.enum";
 import {HttpErrorResponse} from "@angular/common/http";
+import {CustomHttpResponse} from "../model/custom-http-response";
+import {TabName} from "../enum/tab-name.enum";
 
 @Component({
   selector: 'app-task',
@@ -29,6 +31,7 @@ export class TaskComponent implements OnInit {
   public paginationButtonMiddle: number = 2;
   public paginationButtonLast: number = 3;
   public paginationActiveButton = 'first';
+  public executionDatePlan: Date | null = null;
   private nextTaskPage: Task[] = [];
 
   public refreshing = false;
@@ -38,7 +41,7 @@ export class TaskComponent implements OnInit {
               private authenticationService: AuthenticationService,
               private applicationService: ApplicationService,
               private taskService: TaskService) {
-    this.applicationService.setActiveTab('Tasks');
+    this.applicationService.setActiveTab(TabName.TASKS);
   }
 
   ngOnInit(): void {
@@ -69,7 +72,16 @@ export class TaskComponent implements OnInit {
 
   public setTaskToUpdate(task: Task): void {
     this.taskToUpdate = this.taskService.cloneTask(task);
-    this.clickButton('open-position-update-btn');
+
+    if (this.taskToUpdate.executor) {
+      this.executorId = this.taskToUpdate.executor.id;
+    }
+
+
+    if (this.taskToUpdate.executionDatePlan) {
+      this.executionDatePlan = new Date(Date.parse(this.taskToUpdate.executionDatePlan.toString()))
+    }
+    this.clickButton('open-task-update-btn');
   }
 
   public setTaskToDelete(task: Task): void {
@@ -148,12 +160,13 @@ export class TaskComponent implements OnInit {
   this.taskToCreate = new Task();
   this.taskToUpdate = new Task();
   this.taskToDelete = new Task();
+  this.executorId = '';
   if (ngForm) {
     ngForm.reset();
   }
   }
 
-  public onAddNewTask() {
+  public onAddNewTask(startTask: boolean = false) {
     for (let executor of this.executors) {
       if (executor.id === this.executorId) {
         this.taskToCreate.executor = new User();
@@ -166,7 +179,11 @@ export class TaskComponent implements OnInit {
           this.clickButton('add-new-task-close-btn');
           this.getTasks();
           this.resetData(null);
-          this.showNotification(NotificationType.SUCCESS, `New task: ${response.number} was created successfully`);
+          if (startTask) {
+            this.startTask(response.id)
+          } else {
+            this.showNotification(NotificationType.SUCCESS, `New task: ${response.number} was created successfully`);
+          }
         }, (errorResponse: HttpErrorResponse) => {
           this.showNotification(NotificationType.ERROR, errorResponse.error.message);
         });
@@ -176,8 +193,69 @@ export class TaskComponent implements OnInit {
 
   }
 
-  public startTask() {
+  public onUpdateTask(startTask: boolean = false):void {
+    for (let executor of this.executors) {
+      if (executor.id === this.executorId) {
+        this.taskToUpdate.executor = new User();
+        this.taskToUpdate.executor.id = this.executorId;
+      }
+    }
 
+    if (this.taskToUpdate.creator) {
+      let creator = new User();
+      creator.id = this.taskToUpdate.creator.id;
+      this.taskToUpdate.creator = creator;
+    }
+
+    if (this.taskToUpdate.initiator) {
+      let initiator = new User();
+      initiator.id = this.taskToUpdate.initiator.id;
+      this.taskToUpdate.initiator = initiator;
+    }
+
+    if (this.taskToUpdate.executor) {
+      this.taskService.updateTask(this.taskToUpdate).subscribe(
+        (response: Task) => {
+          this.clickButton('update-task-close-btn');
+          this.getTasks();
+          this.resetData(null);
+          if (startTask) {
+            this.startTask(response.id);
+          } else {
+            this.showNotification(NotificationType.SUCCESS, `Task: ${response.number} was updated successfully`);
+          }
+        }, (errorResponse: HttpErrorResponse) => {
+          this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+        });
+    } else {
+      this.showNotification(NotificationType.ERROR, `Executor with id: ${this.executorId} not found`);
+    }
+  }
+
+  public updateExecutionDatePlan(event: any): void {
+    this.executionDatePlan = new Date(Date.parse(event.target.value));
+    this.taskToUpdate.executionDatePlan = this.executionDatePlan;
+  }
+
+  public onDeleteTask(id: string) {
+    this.taskService.deleteTask(id).subscribe((response: CustomHttpResponse) => {
+      this.clickButton('close-task-delete-modal');
+      this.getTasks();
+      this.resetData(null);
+      this.showNotification(NotificationType.WARNING, response.message);
+    }, (errorResponse: HttpErrorResponse) => {
+      this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+    });
+  }
+
+  public startTask(id: string) : void {
+    this.taskService.startTask(id).subscribe((response: CustomHttpResponse) => {
+      this.getTasks();
+      this.resetData(null);
+      this.showNotification(NotificationType.INFO, response.message);
+    }, (errorResponse: HttpErrorResponse) => {
+      this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+    });
   }
 
   private showNotification(notificationType: NotificationType, message: string): void {
@@ -186,5 +264,9 @@ export class TaskComponent implements OnInit {
     } else {
       this.notificationService.notify(notificationType, 'An error occurred. Please try again.');
     }
+  }
+
+  public cancelTask() {
+
   }
 }

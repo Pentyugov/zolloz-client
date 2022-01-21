@@ -27,6 +27,7 @@ import {ScrollingModule} from "@angular/cdk/scrolling";
 import { EmployeeComponent } from './employee/employee.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
+import { RoleComponent } from './role/role.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
     SettingsComponent,
     ProfileComponent,
     SidebarComponent,
-    EmployeeComponent
+    EmployeeComponent,
+    RoleComponent
   ],
   imports: [
     BrowserModule,

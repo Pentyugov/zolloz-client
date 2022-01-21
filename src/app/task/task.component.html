@@ -62,7 +62,7 @@
           <td>
             <div class="btn-group">
               <button class="btn btn-outline-info" (click)="setTaskToUpdate(task)"><i class="fas fa-edit"></i></button>
-              <button class="btn btn-outline-danger" id="open-position-delete-btn" data-toggle="modal" data-target="#deleteTaskModal"
+              <button class="btn btn-outline-danger" id="open-task-delete-btn" data-toggle="modal" data-target="#deleteTaskModal"
                       (click)="setTaskToDelete(task)"><i class="fas fa-trash"></i></button>
             </div>
           </td>
@@ -118,13 +118,13 @@
                   <textarea type="text" name="description" ngModel maxlength="240" placeholder="max length 240" class="form-control" cols="40" rows="3" [(ngModel)]="taskToCreate.comment"></textarea>
                 </div>
               </div>
-
             </div>
+
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="required control-label">Due date&nbsp;</label>
-                  <input type="date" required name="hireDate" ngModel class="form-control" [(ngModel)]="taskToCreate.executionDatePlan">
+                  <input type="date" name="executionDatePlan" ngModel class="form-control" [(ngModel)]="taskToCreate.executionDatePlan">
                 </div>
               </div>
               <div class="col-md-6 ml-auto">
@@ -148,7 +148,218 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" id="add-new-task-close-btn" (click)="resetData(newTaskForm)">Close</button>
           <button type="button" class="btn btn-primary" (click)="onAddNewTask()" [disabled]="newTaskForm.invalid">Save task</button>
-          <button type="button" class="btn btn-success" (click)="startTask()" [disabled]="newTaskForm.invalid">Start task</button>
+          <button type="button" class="btn btn-success" (click)="onAddNewTask(true)" [disabled]="newTaskForm.invalid">Start task</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--  update task modal-->
+  <div class="modal draggable fade bd-example-modal-lg" id="updateTaskModal" tabindex="-1" role="dialog"
+       aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center">New Task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="resetData(updateTaskForm)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #updateTaskForm="ngForm">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="required control-label">Number&nbsp;</label>
+                  <input type="text" name="number" required ngModel class="form-control" [(ngModel)]="taskToUpdate.number">
+                </div>
+              </div>
+              <div class="col-md-6 ml-auto">
+                <div class="form-group">
+                  <label class="required control-label">Priority&nbsp;</label>
+                  <select name="userId" class="form-control" [(ngModel)]="taskToUpdate.priority">
+                    <option value="10" selected>Low</option>
+                    <option value="20" selected>Medium</option>
+                    <option value="30" selected>High</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Description&nbsp;</label>
+                  <textarea type="text" name="description" ngModel maxlength="240" placeholder="max length 240" class="form-control" cols="40" rows="4" [(ngModel)]="taskToUpdate.description"></textarea>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Comment&nbsp;</label>
+                  <textarea type="text" name="comment" ngModel maxlength="240" placeholder="max length 240" class="form-control" cols="40" rows="3" [(ngModel)]="taskToUpdate.comment"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="required control-label">Due date&nbsp;</label>
+                  <input type="date" name="executionDatePlan" ngModel class="form-control" (change)="updateExecutionDatePlan($event)" [valueAsDate]="executionDatePlan">
+                </div>
+              </div>
+              <div class="col-md-6 ml-auto">
+                <div class="form-group">
+                  <label>Executor&nbsp;</label>
+                  <select name="executor" class="form-control" [(ngModel)]="executorId">
+                    <option [value]="executor.id" *ngFor="let executor of executors">{{executor.username}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+              </div>
+              <div class="col-md-6">
+              </div>
+            </div>
+            <button type="submit" style="display: none;" id="update-task-btn"></button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="update-task-close-btn" (click)="resetData(updateTaskForm)">Close</button>
+          <button type="button" class="btn btn-primary" (click)="onUpdateTask()" [disabled]="updateTaskForm.invalid">Update task</button>
+          <button type="button" class="btn btn-success" (click)="onUpdateTask(true)" [disabled]="updateTaskForm.invalid" *ngIf="!taskToUpdate.started">Start task</button>
+          <button type="button" class="btn btn-danger" (click)="cancelTask()" *ngIf="taskToUpdate.started">Cancel task</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--    modal delete task-->
+  <div class="modal fade" id="deleteTaskModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModelLabel">Delete Task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-task-delete-modal">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete task: {{taskToDelete?.number}}?</p>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            <button (click)="onDeleteTask(taskToDelete.id)" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- info task modal -->
+  <div class="modal fade bd-example-modal-lg" id="viewTaskModal" tabindex="-1" role="dialog" aria-labelledby=""
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center" id="exampleModalLongTitle">Task info</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <div>
+            <ul class="list-group list-group-flush">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="required control-label">Number&nbsp;</label>
+                    <li class="list-group-item"><i class="fa fa-hashtag float-right"></i>{{taskSelected.number}}</li>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="required control-label">State&nbsp;</label>
+                    <li class="list-group-item"><i class="fa fa-clipboard float-right"></i>
+                            {{taskSelected.state !== '' ? taskSelected.state : 'n/a'}}</li>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="required control-label">Description&nbsp;</label>
+                    <textarea disabled cols="63" rows="3">{{taskSelected.description}}</textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="required control-label">Comment&nbsp;</label>
+                    <textarea disabled cols="63" rows="3">{{taskSelected.comment}}</textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="required control-label">Due date&nbsp;</label>
+                    <li class="list-group-item"><i class="fa fa-calendar float-right"></i>
+                      {{(taskSelected.executionDatePlan !== null) ? (taskSelected.executionDatePlan | date : 'dd/MM/yyyy') : 'n/a'}}</li>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="required control-label">Execution date&nbsp;</label>
+                    <li class="list-group-item"><i class="fa fa-calendar float-right"></i>
+                      {{(taskSelected.executionDateFact !== null) ? (taskSelected.executionDateFact | date : 'dd/MM/yyyy') : 'n/a'}}</li>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="required control-label">Initiator&nbsp;</label>
+                    <li class="list-group-item"><i class="fa fa-user float-right"></i>
+                      {{taskSelected.initiator !== null ? taskSelected.initiator.username : 'n/a'}}</li>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="required control-label">Executor&nbsp;</label>
+                    <li class="list-group-item"><i class="fa fa-user float-right"></i>
+                      {{taskSelected.executor !== null ? taskSelected.executor.username : 'n/a'}}</li>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="required control-label">Priority&nbsp;</label>
+                    <li class="list-group-item"><i class="fa fa-chart-line float-right"></i>
+                      {{taskSelected?.priority === 10 ? 'Low' : (taskSelected?.priority === 20 ? 'Medium' : 'High') }}</li>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="required control-label">Started&nbsp;</label>
+                    <li class="list-group-item"><i class="fa fa-play float-right"></i>
+                      {{taskSelected.started === true ? 'Started' : 'Not started'}}</li>
+                  </div>
+                </div>
+              </div>
+            </ul>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>

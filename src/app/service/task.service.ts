@@ -36,7 +36,11 @@ export class TaskService {
   }
 
   public deleteTask(id: string): Observable<CustomHttpResponse> {
-    return this.httpClient.delete<CustomHttpResponse>(`${this.host}/task/delete-note/${id}`);
+    return this.httpClient.delete<CustomHttpResponse>(`${this.host}/task/delete-task/${id}`);
+  }
+
+  public startTask(id: string): Observable<CustomHttpResponse> {
+    return this.httpClient.get<CustomHttpResponse>(`${this.host}/task/start-task/${id}`);
   }
 
   cloneTask(taskToClone: Task) {
@@ -53,6 +57,7 @@ export class TaskService {
     task.executor = taskToClone.executor;
     task.initiator = taskToClone.initiator;
     task.daysUntilDueDate = taskToClone.daysUntilDueDate;
+    task.started = taskToClone.started;
     return task;
   }
 }

@@ -23,12 +23,15 @@
            [ngClass]="{'active': isTabActive('Departments')}"><i class="fa fa-building"></i>&nbsp;Departments</a>
         <a class="nav-item nav-link ml-1" href="" data-toggle="tab" (click)="changeTab('/employee/management')"
            [ngClass]="{'active': isTabActive('Employees')}"><i class="fa fa-address-card"></i>&nbsp;Employees</a>
+        <a class="nav-item nav-link ml-1" href="" data-toggle="tab" (click)="changeTab('/roles')"
+           [ngClass]="{'active': isTabActive('Roles')}"><i class="fa fa-user-lock"></i>&nbsp;Roles</a>
         <a class="nav-item nav-link ml-1" href="" data-toggle="tab" (click)="changeTab('/position/management')"
            [ngClass]="{'active': isTabActive('Positions')}"><i class="fa fa-sitemap"></i>&nbsp;Positions</a>
         <a class="nav-item nav-link ml-1" href="" data-toggle="tab" (click)="changeTab('/settings')"
            [ngClass]="{'active': isTabActive('Settings')}"><i class="fa fa-cogs"></i>&nbsp;Settings</a>
         <a class="nav-item nav-link move-right mr-3" href="" data-toggle="tab" (click)="changeTab('/profile')"
            [ngClass]="{'active': isTabActive('Profile')}">Welcome, {{currentUser?.username}}&nbsp;<i class="fa fa-user"></i></a>
+
       </div>
     </div>
   </nav>

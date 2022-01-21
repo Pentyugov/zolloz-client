@@ -12,6 +12,7 @@ import {ProfileComponent} from "./profile/profile.component";
 import {AuthenticationGuard} from "./guard/authentication.guard";
 import {SidebarComponent} from "./sidebar/sidebar.component";
 import {EmployeeComponent} from "./employee/employee.component";
+import {RoleComponent} from "./role/role.component";
 
 const routes: Routes = [
   {path: 'main', component: MainComponent, canActivate: [AuthenticationGuard]},
@@ -25,6 +26,7 @@ const routes: Routes = [
   {path: 'settings', component: SettingsComponent, canActivate: [AuthenticationGuard]},
   {path: 'profile', component: ProfileComponent, canActivate: [AuthenticationGuard]},
   {path: 'sidebar', component: SidebarComponent, canActivate: [AuthenticationGuard]},
+  {path: 'roles', component: RoleComponent, canActivate: [AuthenticationGuard]},
   {path: '', redirectTo: '/login', pathMatch: 'full', },
 ];
 

@@ -1,3 +1,5 @@
+import {Role} from "./role";
+
 export class User {
   public id: string;
   public firstName: string;
@@ -10,8 +12,7 @@ export class User {
   public profileImage: string;
   public active: boolean;
   public nonLocked: boolean;
-  public roles: string[];
-  public permissions: string[];
+  public roles: Role[];
 
   constructor() {
     this.id = '';
@@ -26,7 +27,6 @@ export class User {
     this.active = false;
     this.nonLocked = false;
     this.roles = [];
-    this.permissions = [];
   }
 
 }
