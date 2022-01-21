@@ -47,6 +47,7 @@ export class TaskComponent implements OnInit {
   ngOnInit(): void {
     this.getTasks();
     this.getExecutors();
+    this.loadNextPage(this.currentPage + 1);
   }
 
   public getTasks(page: number = 0): void {
