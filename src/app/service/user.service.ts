@@ -30,6 +30,10 @@ export class UserService {
     return this.httpClient.get<CustomHttpResponse>(`${this.host}/user/reset-password/${email}`,);
   }
 
+  public changePassword(formData: FormData): Observable<CustomHttpResponse> {
+    return this.httpClient.post<CustomHttpResponse>(`${this.host}/user/change-password`, formData);
+  }
+
   public deleteUser(id: string): Observable<CustomHttpResponse> {
     return this.httpClient.delete<CustomHttpResponse>(`${this.host}/user/delete-user/${id}`);
   }

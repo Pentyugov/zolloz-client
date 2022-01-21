@@ -8,6 +8,8 @@ import {NgForm} from "@angular/forms";
 import {NotificationType} from "../enum/notification-type.enum";
 import {HttpErrorResponse} from "@angular/common/http";
 import {NotificationService} from "../service/notification.service";
+import {Position} from "../model/position";
+import {CustomHttpResponse} from "../model/custom-http-response";
 
 @Component({
   selector: 'app-role',
@@ -18,9 +20,9 @@ export class RoleComponent implements OnInit {
 
   public roles: Role [] = [];
   public refreshing: boolean = false;
-  public roleSelected: Role | null = null;
-  public roleToUpdate: Role | null = null;
-  public roleToDelete: Role | null = null;
+  public roleSelected: Role = new Role();
+  public roleToUpdate: Role = new Role();
+  public roleToDelete: Role = new Role();
   public roleToCreate: Role = new Role();
 
   constructor(private applicationService: ApplicationService,
@@ -43,7 +45,17 @@ export class RoleComponent implements OnInit {
   }
 
   public search(searchTerm: string): void {
+    const results: Role[] = [];
+    for (const role of this.roles) {
+      if ((role.name != null && role.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)) {
+        results.push(role);
+      }
+    }
 
+    this.roles = results;
+    if (results.length === 0 || !searchTerm) {
+      this.getRoles();
+    }
   }
 
   public setSelectedRole(role: Role) {
@@ -51,7 +63,8 @@ export class RoleComponent implements OnInit {
   }
 
   public setRoleToUpdate(role: Role) {
-    this.roleToUpdate = role;
+    this.roleToUpdate = this.roleService.cloneRole(role);
+    this.clickButton('open-role-update-btn');
   }
 
   public setRoleToDelete(role: Role) {
@@ -80,6 +93,19 @@ export class RoleComponent implements OnInit {
       });
   }
 
+
+  public onUpdateRole() {
+    this.roleService.updateRole(this.roleToUpdate).subscribe(
+      (response: Role) => {
+        this.clickButton('update-role-close-btn');
+        this.getRoles();
+        this.resetData(null);
+        this.showNotification(NotificationType.SUCCESS, `Role: ${response.name} was updated successfully`);
+      }, (errorResponse: HttpErrorResponse) => {
+        this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+      });
+  }
+
   private clickButton(buttonId: string) {
     document.getElementById(buttonId)?.click();
   }
@@ -90,5 +116,16 @@ export class RoleComponent implements OnInit {
     } else {
       this.notificationService.notify(notificationType, 'An error occurred. Please try again.');
     }
+  }
+
+  onDeletePosition() {
+    this.roleService.deleteRole(this.roleToDelete.id).subscribe((response: CustomHttpResponse) => {
+      this.clickButton('close-role-delete-modal');
+      this.getRoles();
+      this.resetData(null);
+      this.showNotification(NotificationType.WARNING, response.message);
+    }, (errorResponse: HttpErrorResponse) => {
+      this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+    });
   }
 }

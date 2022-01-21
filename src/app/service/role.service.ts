@@ -21,7 +21,7 @@ export class RoleService {
   }
 
   public updateRole(role: Role): Observable<Role> {
-    return this.httpClient.post<Role>(`${this.host}/role/update-roles`, role);
+    return this.httpClient.post<Role>(`${this.host}/role/update-role`, role);
   }
 
   public getRoles(): Observable<Role[]> {
@@ -30,5 +30,14 @@ export class RoleService {
 
   public deleteRole(id: string): Observable<CustomHttpResponse> {
     return this.httpClient.delete<CustomHttpResponse>(`${this.host}/role/delete-role/${id}`);
+  }
+
+  public cloneRole(roleToClone: Role): Role {
+    let role = new Role();
+    role.id = roleToClone.id;
+    role.name = roleToClone.name;
+    role.description = roleToClone.description;
+    role.permissions = roleToClone.permissions;
+    return role;
   }
 }

@@ -48,15 +48,13 @@
                                     <div class="col">
                                       <div class="form-group">
                                         <label>First Name</label>
-                                        <input type="text" name="firstName" required [(ngModel)]="user.firstName"
-                                               class="form-control">
+                                        <input type="text" name="firstName" required [(ngModel)]="user.firstName" class="form-control">
                                       </div>
                                     </div>
                                     <div class="col">
                                       <div class="form-group">
                                         <label>Last Name</label>
-                                        <input type="text" name="lastName" required [(ngModel)]="user.lastName"
-                                               class="form-control">
+                                        <input type="text" name="lastName" required [(ngModel)]="user.lastName" class="form-control">
                                       </div>
                                     </div>
                                   </div>
@@ -64,31 +62,13 @@
                                     <div class="col">
                                       <div class="form-group">
                                         <label>Username</label>
-                                        <input type="text" name="username" required [(ngModel)]="user.username"
-                                               class="form-control">
+                                        <input type="text" name="username" required [(ngModel)]="user.username" class="form-control">
                                       </div>
                                     </div>
-                                  </div>
-                                  <div class="row">
                                     <div class="col">
                                       <div class="form-group">
                                         <label>Email</label>
-                                        <input type="text" name="email" required [(ngModel)]="user.email"
-                                               class="form-control">
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="row">
-                                    <div class="col mb-3">
-                                      <div class="form-group">
-                                        <label>Role</label><small >(read only)</small>
-                                        <select name="role" required [(ngModel)]="user.roles" class="form-control">
-<!--                                          <option [hidden]="!isAdmin" value="ROLE_USER">USER</option>-->
-<!--                                          <option [hidden]="!isAdmin" value="ROLE_HR">HR</option>-->
-<!--                                          <option [hidden]="!isAdmin" value="ROLE_MANAGER">MANAGER</option>-->
-<!--                                          <option [hidden]="!isAdmin" value="ROLE_ADMIN">ADMIN</option>-->
-<!--                                          <option [hidden]="!isAdmin" value="ROLE_SUPER_ADMIN">SUPER ADMIN</option>-->
-                                        </select>
+                                        <input type="text" name="email" required [(ngModel)]="user.email" class="form-control">
                                       </div>
                                     </div>
                                   </div>
@@ -134,17 +114,20 @@
                   <div class="card mb-3">
                     <div class="card-body">
                       <div class="px-xl-3">
-                        <button  class="btn btn-block btn-secondary">
-                          <span>Logout</span>
-                          <i class="fas fa-sign-in-alt ml-1"></i>
+                        <button  class="btn btn-block btn-danger">
+                          <span>Logout&nbsp;</span><i class="fas fa-sign-in-alt ml-1"></i>
                         </button>
                       </div>
                     </div>
                   </div>
-                  <div class="card">
+
+                  <div class="card mb-3">
                     <div class="card-body">
-                      <h6 class="card-title font-weight-bold">Permissions From Role</h6>
-                      <h6 class="card-text"></h6>
+                      <div class="px-xl-3">
+                        <button class="btn btn-block btn-info" data-toggle="modal" data-target="#changePasswordModal">
+                          <span>Change password&nbsp;</span><i class="fa fa-key"></i>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -152,5 +135,38 @@
             </div>
           </div>
         </div>
+
+  <!--  change password modal-->
+  <div class="modal draggable fade bd-example-modal-lg" id="changePasswordModal" tabindex="-1" role="dialog"
+       aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center">Change password</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form #changePasswordForm="ngForm">
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" required ngModel class="form-control">
+              </div>
+              <div class="form-group">
+                <label>Confirm password</label>
+                <input type="password" name="confirmPassword" required ngModel class="form-control">
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="change-password-close-btn" (click)="resetData(changePasswordForm)">Close</button>
+          <button type="button" class="btn btn-primary" (click)="onChangePassword(changePasswordForm)" [disabled]="changePasswordForm.invalid">Change Password</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </app-sidebar>
 

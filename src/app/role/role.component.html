@@ -46,15 +46,15 @@
           </div>
         </div>
 
-        <button [hidden]="true" type="button" id="open-department-info-btn" data-toggle="modal" data-target="#viewDepartmentModal"></button>
-        <button [hidden]="true" type="button" id="open-department-update-btn" data-toggle="modal" data-target="#updateDepartmentModal"></button>
+        <button [hidden]="true" type="button" id="open-role-info-btn" data-toggle="modal" data-target="#viewRoleModal"></button>
+        <button [hidden]="true" type="button" id="open-role-update-btn" data-toggle="modal" data-target="#updateRoleModal"></button>
       </div>
 
 
     </div>
   </div>
 
-  <!--  add position modal-->
+  <!--  add role modal-->
   <div class="modal draggable fade bd-example-modal-lg" id="addRoleModal" tabindex="-1" role="dialog"
        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -82,6 +82,61 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" id="add-new-role-close-btn" (click)="resetData(newRoleForm)">Close</button>
           <button type="button" class="btn btn-primary" (click)="onAddNewRole()" [disabled]="newRoleForm.invalid">Add new role</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--  update role modal-->
+  <div class="modal draggable fade bd-example-modal-lg" id="updateRoleModal" tabindex="-1" role="dialog"
+       aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center">Update Role</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="resetData(updateRoleForm)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form #updateRoleForm="ngForm">
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="name" required ngModel class="form-control" [(ngModel)]="roleToUpdate.name">
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea type="text" name="description" ngModel class="form-control" cols="40" rows="2" maxlength="240" [(ngModel)]="roleToUpdate.description"></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="update-role-close-btn" (click)="resetData(updateRoleForm)">Close</button>
+          <button type="button" class="btn btn-primary" (click)="onUpdateRole()" [disabled]="updateRoleForm.invalid">Update role</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  delete position modal-->
+  <div class="modal fade" id="deleteRoleModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModelLabel">Delete User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-role-delete-modal">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete Role: {{roleToDelete?.name}}?</p>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            <button (click)="onDeletePosition()" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+          </div>
         </div>
       </div>
     </div>
