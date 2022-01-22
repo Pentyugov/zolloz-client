@@ -136,7 +136,7 @@ export class TaskComponent implements OnInit {
 
   public search(searchTerm: string): void {
     const results: Task[] = [];
-    for (const task of this.tasks) {
+    for (let task of this.tasks) {
       if ((task.number != null && task.number.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)) {
         results.push(task);
       }

@@ -6,6 +6,7 @@ import {User} from "../model/user";
 import {LoginRequest} from "../model/login-request";
 import {SignUpRequest} from "../model/sign-up-request";
 import {JwtHelperService} from "@auth0/angular-jwt";
+import {CustomHttpResponse} from "../model/custom-http-response";
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,10 @@ export class AuthenticationService {
 
   public register(signUpRequest: SignUpRequest): Observable<User> {
     return this.httpClient.post<User>(`${this.host}/auth/register`, signUpRequest);
+  }
+
+  public changePassword(formData: FormData): Observable<CustomHttpResponse> {
+    return this.httpClient.post<CustomHttpResponse>(`${this.host}/auth/change-password`, formData);
   }
 
   public logOut(): void {

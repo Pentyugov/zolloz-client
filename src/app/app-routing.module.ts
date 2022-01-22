@@ -13,11 +13,13 @@ import {AuthenticationGuard} from "./guard/authentication.guard";
 import {SidebarComponent} from "./sidebar/sidebar.component";
 import {EmployeeComponent} from "./employee/employee.component";
 import {RoleComponent} from "./role/role.component";
+import {ChangePasswordComponent} from "./change-password/change-password.component";
 
 const routes: Routes = [
   {path: 'main', component: MainComponent, canActivate: [AuthenticationGuard]},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
+  {path: 'change-password', component: ChangePasswordComponent},
   {path: 'department/management', component: DepartmentComponent, canActivate: [AuthenticationGuard]},
   {path: 'position/management', component: PositionComponent, canActivate: [AuthenticationGuard]},
   {path: 'user/management', component: UserComponent, canActivate: [AuthenticationGuard]},
