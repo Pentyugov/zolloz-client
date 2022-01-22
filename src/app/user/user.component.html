@@ -108,11 +108,11 @@
                           <span [hidden]="!selectedUser?.active" class="badge badge-success">Active</span>
                           <span [hidden]="selectedUser?.active" class="badge badge-danger">Inactive</span>
                         </div>
-                        <div class="text-muted"><small>Last Login: {{selectedUser?.lastLoginDateDisplay | date: 'dd.MM.yyyy'}}</small>
+                        <div class="text-muted"><small>Last Login: {{selectedUser?.lastLoginDateDisplay}}</small>
                         </div>
                       </div>
                       <div class="text-center text-sm-right">
-                        <div class="text-muted"><small>Joined {{selectedUser?.joinDate | date: 'dd.MM.yyyy'}}</small></div>
+                        <div class="text-muted"><small>Joined {{selectedUser?.joinDate}}</small></div>
                       </div>
                     </div>
                   </div>
@@ -122,7 +122,7 @@
                   <li class="list-group-item"><i class="fa fa-id-badge float-right"></i>{{selectedUser?.id}}</li>
                   <li class="list-group-item"><i class="fa fa-envelope float-right"></i>{{selectedUser?.email}}</li>
                   <li class="list-group-item"><i class="fas fa-shield-alt float-right"></i>{{selectedUser?.roles}}</li>
-                  <li class="list-group-item"><i class="fas fa-sign-in-alt float-right"></i>{{selectedUser?.lastLoginDate | date: 'medium'}}</li>
+                  <li class="list-group-item"><i class="fas fa-sign-in-alt float-right"></i>{{selectedUser?.lastLoginDate}}</li>
                   <li class="list-group-item">
                     <span [hidden]="selectedUser?.nonLocked"><i class="fa fa-lock float-right" style="color: red;"></i>Account Locked</span>
                     <span [hidden]="!selectedUser?.nonLocked"><i class="fa fa-unlock float-right" style="color: green;"></i>Account Unlocked</span>

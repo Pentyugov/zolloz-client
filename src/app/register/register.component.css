@@ -6,7 +6,7 @@ html {
   background: #60a3bc !important;
 }
 .user_card {
-  height: 600px;
+  height: 700px;
   width: 600px;
   margin-top: auto;
   margin-bottom: auto;
@@ -43,7 +43,7 @@ html {
 }
 .login_btn {
   width: 100%;
-  background: #1B4F72!important;
+  background: #007bff!important;
   color: white !important;
 }
 .login_btn:focus {
@@ -54,7 +54,7 @@ html {
   padding: 0 2rem;
 }
 .input-group-text {
-  background: #1B4F72!important;
+  background: #007bff!important;
   color: white !important;
   border: 0 !important;
   border-radius: 0.25rem 0 0 0.25rem !important;
@@ -65,5 +65,5 @@ html {
   outline: 0px !important;
 }
 .custom-checkbox .custom-control-input:checked~.custom-control-label::before {
-  background-color: #1B4F72!important;
+  background-color: #007bff!important;
 }

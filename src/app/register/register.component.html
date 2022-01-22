@@ -29,14 +29,16 @@
             <input type="text" class="form-control" name="username" placeholder="Username" required ngModel #usernameInput="ngModel">
           </div>
           <span class="help-block" *ngIf="usernameInput.invalid && usernameInput.touched" style="color:red;">Please enter a username</span>
+
           <div class="input-group mb-3">
             <div class="input-group-append">
               <span class="input-group-text"><i class="fas fa-envelope"></i></span>
             </div>
             <input type="email" class="form-control" name="email" placeholder="Email" required ngModel email="true" #emailInput="ngModel">
           </div>
+          <span class="help-block" *ngIf="emailInput.invalid && emailInput.touched" style="color:red;">Please enter an email.</span>
 
-          <span class="help-block" *ngIf="passwordInput.invalid && passwordInput.touched" style="color:red;">Please enter a password</span>
+
           <div class="input-group mb-3">
             <div class="input-group-append">
               <span class="input-group-text"><i class="fas fa-key"></i></span>
@@ -44,8 +46,9 @@
             <input type="password" class="form-control" name="password" placeholder="Password" required
                    ngModel #passwordInput="ngModel" [(ngModel)] = "password" (ngModelChange)="isPasswordMatches()">
           </div>
+          <span class="help-block" *ngIf="passwordInput.invalid && passwordInput.touched" style="color:red;">Please enter a password</span>
 
-          <span class="help-block" *ngIf="confirmPasswordInput.touched && !passwordMatches" style="color:red;">Passwords should match</span>
+
           <div class="input-group mb-3">
             <div class="input-group-append">
               <span class="input-group-text"><i class="fas fa-key"></i></span>
@@ -53,8 +56,8 @@
             <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm password" required
                    ngModel #confirmPasswordInput="ngModel" [(ngModel)]="confirmPassword" (ngModelChange)="isPasswordMatches()">
           </div>
+          <span class="help-block" *ngIf="confirmPasswordInput.touched && !passwordMatches" style="color:red;">Passwords should match</span>
 
-          <span class="help-block" *ngIf="emailInput.invalid && emailInput.touched" style="color:red;">Please enter an email.</span>
           <div class="d-flex justify-content-center mt-3 login_container">
             <button [disabled]="registerForm.invalid || showLoading || !passwordMatches" type="submit" name="button" class="btn login_btn">
               <i *ngIf="showLoading" class="fas fa-spinner fa-spin"></i>&nbsp;&nbsp;
