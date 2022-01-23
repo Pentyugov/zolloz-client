@@ -7,4 +7,5 @@ export enum TabName {
   SETTINGS = 'Settings',
   PROFILE = 'Profile',
   ROLE = 'Roles',
+  CHAT = 'Chat',
 }

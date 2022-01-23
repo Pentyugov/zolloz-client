@@ -29,6 +29,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 import { RoleComponent } from './role/role.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     SidebarComponent,
     EmployeeComponent,
     RoleComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
