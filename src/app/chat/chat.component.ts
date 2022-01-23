@@ -21,7 +21,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   public chatMessageToSend: ChatMessage = new ChatMessage();
   public chatMessages: ChatMessage[] = [];
   public chatService: ChatService;
-  public testMap: Map<String, ChatMessage[]> = new Map<string, ChatMessage[]>();
+  public userChatMessageMap: Map<String, ChatMessage[]> = new Map<String, ChatMessage[]>();
   connected: boolean = false;
 
   constructor(private applicationService: ApplicationService,
@@ -37,17 +37,17 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.currentUser = this.authenticationService.getUserFromLocalCache();
     this.chatService = new ChatService(this, this.currentUser.id);
     this.connect();
-    this.testMap.set('ewqqwe', []);
     this.test();
   }
 
   public test(): void {
-    this.chatMessages = this.testMap.get('ewqqwe') as ChatMessage[];
-    let a = '';
 
     this.chatMessageService.test().subscribe(
-      (response: Map<String, ChatMessage[]>) => {
-        this.testMap = response;
+      (response) => {
+        Object.entries(response).forEach(([key, value])=>{
+          console.log(key, value)
+          this.userChatMessageMap.set(key, value);
+        });
         let b = '';
       }
     )
@@ -81,13 +81,14 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   public changeRecipient(user: User) {
     this.recipient = user;
-    this.chatMessageService.getRoomChatMessages(this.recipient).subscribe(
-      (response: ChatMessage[]) => {
-        this.chatMessages = response;
-      }, error => {
-        this.chatMessages = [];
-      }
-    );
+    this.chatMessages = this.userChatMessageMap.get(this.recipient.id) as ChatMessage[];
+    // this.chatMessageService.getRoomChatMessages(this.recipient).subscribe(
+    //   (response: ChatMessage[]) => {
+    //     this.chatMessages = response;
+    //   }, error => {
+    //     this.chatMessages = [];
+    //   }
+    // );
   }
 
   private connect(){
