@@ -128,6 +128,28 @@ export class ChatComponent implements OnInit, OnDestroy {
     return count;
   }
 
+  public closeChat() {
+    this.chatSelected = false;
+    this.recipient = new User();
+    this.chatMessages = [];
+  }
+
+  public search(searchTerm: string): void {
+    const results: User[] = [];
+    for (const user of this.users) {
+      if ((user.username != null && user.username.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1) ||
+        (user.firstName != null && user.firstName.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1) ||
+        (user.lastName != null && user.lastName.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)) {
+        results.push(user);
+      }
+    }
+
+    this.users = results;
+    if (results.length === 0 || !searchTerm) {
+      this.getUsers();
+    }
+  }
+
   private connect(){
     this.chatService._connect();
     this.connected = true;
@@ -137,5 +159,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatService._disconnect();
     this.connected = false;
   }
+
+
 
 }

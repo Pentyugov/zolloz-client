@@ -12,7 +12,8 @@
             <div class="px-4 d-none d-md-block">
               <div class="d-flex align-items-center">
                 <div class="flex-grow-1">
-                  <input type="text" class="form-control my-3" placeholder="Search...">
+                  <input name="searchTerm" #searchInput="ngModel" class="form-control my-3" ngModel (ngModelChange)="search(searchInput.value)"
+                         type="search" placeholder="Search user...">
                 </div>
               </div>
             </div>
@@ -50,11 +51,15 @@
                     <strong>{{recipient.username}}</strong>
                     <div class="text-muted small"><em>{{recipient.firstName}} {{recipient.lastName}}</em></div>
                   </div>
+
+                  <div>
+                    <button class="btn btn-danger btn-lg mr-1 px-3" (click)="closeChat()">Close chat</button>
+                  </div>
                 </div>
               </div>
 
               <div class="position-relative">
-                <div class="chat-messages p-4" style="overflow: auto; height: 600px;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+                <div class="chat-messages p-4" style="overflow: auto; height: 580px;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
                   <div *ngFor="let chatMessage of chatMessages">
                     <div [ngClass]="{'chat-message-right pb-4': currentUser.id === chatMessage.senderId, 'chat-message-left pb-4': currentUser.id === chatMessage.recipientId}">
                       <div>
