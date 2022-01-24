@@ -3,7 +3,7 @@
   <main class="content-fluid">
 <!--    <div class="container p-0">-->
 
-      <h1 class="h3 mb-3">Messages</h1>
+    <h1 class="text-secondary">Company chat</h1>
 
       <div class="card">
         <div class="row g-0">
@@ -24,7 +24,7 @@
                 <div class="d-flex align-items-start">
                   <img src="{{user.profileImage}}" class="rounded-circle mr-1" alt="{{user.username}}" width="40" height="40">
                   <div class="flex-grow-1 ml-3">
-                    {{user.username}}
+                    {{user.firstName || user.lastName ? user.firstName + ' ' + user.lastName + ' (' + user.username + ') ' : user.username}}
                     <div class="small"><span class="fas fa-circle chat-online"></span> Last login date: {{user.lastLoginDateDisplay}}</div>
                   </div>
                 </div>
@@ -37,7 +37,7 @@
           <div class="col-12 col-lg-7 col-xl-9 overflow-auto">
             <div id="select-chat" *ngIf="!chatSelected">
               <div class="empty-chat p-4" style="overflow: hidden; height: 800px;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
-                Select chat
+                <h1 class="text-secondary text-center">Select chat</h1>
               </div>
             </div>
             <div id="messages" *ngIf="chatSelected">

@@ -65,12 +65,17 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   public sendMessage() {
-    this.chatMessageToSend.senderId = this.currentUser.id;
-    this.chatMessageToSend.recipientId = this.recipient.id;
-    this.chatMessageToSend.status = 10;
-    this.chatService._send(this.chatMessageToSend);
-    this.userChatMessageMap.get(this.recipient.id)?.push(this.chatMessageToSend);
-    this.chatMessageToSend = new ChatMessage();
+    if (this.chatMessageToSend.content.trim() !== '') {
+      this.chatMessageToSend.senderId = this.currentUser.id;
+      this.chatMessageToSend.recipientId = this.recipient.id;
+      this.chatMessageToSend.status = 10;
+      this.chatService._send(this.chatMessageToSend);
+      this.userChatMessageMap.get(this.recipient.id)?.push(this.chatMessageToSend);
+      this.chatMessageToSend = new ChatMessage();
+    } else {
+      this.chatMessageToSend.content = '';
+    }
+
   }
 
   public handleMessage(message: ChatMessage): void {
