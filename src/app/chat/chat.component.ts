@@ -107,7 +107,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatMessages = this.userChatMessageMap.get(this.recipient.id) as ChatMessage[];
 
     for (let chatMessage of this.chatMessages) {
-      if (chatMessage.status !== ChatMessageStatus.READ) {
+      if (chatMessage.status !== ChatMessageStatus.READ && chatMessage.senderId !== this.currentUser.id) {
         chatMessage.status = ChatMessageStatus.READ;
         this.chatService._updateMessage(chatMessage);
       }
