@@ -12,7 +12,6 @@ export class ChatService {
   constructor(chatComponent: ChatComponent, currentUserId: string) {
     this.chatComponent = chatComponent;
     this.topic = `/user/${currentUserId}/queue/messages`;
-    console.log(this.topic)
   }
   _connect() {
     console.log("Initialize WebSocket Connection");
@@ -41,12 +40,14 @@ export class ChatService {
   }
 
   _send(message: ChatMessage) {
-    console.log("calling logout api via web socket");
     this.stompClient.send(`/api/chat`, {}, JSON.stringify(message));
   }
 
+  _updateMessage(message: ChatMessage) {
+    this.stompClient.send(`/api/chat/update-message`, {}, JSON.stringify(message));
+  }
+
   onMessageReceived(receivedMessage: any) {
-    console.log("Message Received from Server :: " + receivedMessage);
     this.chatComponent.handleMessage(JSON.parse(receivedMessage.body));
   }
 

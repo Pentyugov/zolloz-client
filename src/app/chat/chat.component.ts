@@ -7,6 +7,7 @@ import {AuthenticationService} from "../service/authentication.service";
 import {ChatMessage} from "../model/chat-message";
 import {ChatService} from "../service/chat.service";
 import {ChatMessageService} from "../service/chat-message.service";
+import {ChatMessageStatus} from "../enum/chat-message-status.enum";
 
 @Component({
   selector: 'app-chat',
@@ -14,7 +15,7 @@ import {ChatMessageService} from "../service/chat-message.service";
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit, OnDestroy {
-
+  public chatSelected: boolean = false;
   public users: User[] = [];
   public recipient: User = new User();
   public currentUser: User = new User();
@@ -37,18 +38,20 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.currentUser = this.authenticationService.getUserFromLocalCache();
     this.chatService = new ChatService(this, this.currentUser.id);
     this.connect();
-    this.test();
+    this.getUserChatMessagesMap();
   }
 
-  public test(): void {
+  ngOnDestroy(): void {
+    this.disconnect()
+  }
 
-    this.chatMessageService.test().subscribe(
+  public getUserChatMessagesMap(): void {
+    this.chatMessageService.getUserChatMessagesMap().subscribe(
       (response) => {
         Object.entries(response).forEach(([key, value])=>{
           console.log(key, value)
           this.userChatMessageMap.set(key, value);
         });
-        let b = '';
       }
     )
   }
@@ -66,29 +69,58 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatMessageToSend.recipientId = this.recipient.id;
     this.chatMessageToSend.status = 10;
     this.chatService._send(this.chatMessageToSend);
-    this.chatMessages.push(this.chatMessageToSend);
+    this.userChatMessageMap.get(this.recipient.id)?.push(this.chatMessageToSend);
     this.chatMessageToSend = new ChatMessage();
   }
 
-  public handleMessage(message: ChatMessage){
-    for (let user of this.users) {
-      if (user.id === message.senderId) {
-        this.recipient = user;
-      }
+  public handleMessage(message: ChatMessage): void {
+    const senderId = message.senderId;
+    message.status = senderId === this.recipient.id ? ChatMessageStatus.READ : ChatMessageStatus.RECEIVED;
+    this.chatService._updateMessage(message);
+
+    let userChatMessages = this.userChatMessageMap.get(senderId);
+    if (userChatMessages) {
+      userChatMessages.push(message);
+    } else {
+      let newUserChatMessages: ChatMessage[] = [];
+      newUserChatMessages.push(message);
+      this.userChatMessageMap.set(senderId, newUserChatMessages);
     }
-    this.chatMessages.push(message);
   }
 
-  public changeRecipient(user: User) {
+  public changeChatRoom(user: User): void {
     this.recipient = user;
+    this.chatSelected = true;
+    let userChatMessages = this.userChatMessageMap.get(this.recipient.id);
+    if (userChatMessages) {
+      this.chatMessages = userChatMessages;
+    } else {
+      let newUserChatMessages: ChatMessage[] = [];
+      this.userChatMessageMap.set(this.recipient.id, newUserChatMessages);
+    }
+
     this.chatMessages = this.userChatMessageMap.get(this.recipient.id) as ChatMessage[];
-    // this.chatMessageService.getRoomChatMessages(this.recipient).subscribe(
-    //   (response: ChatMessage[]) => {
-    //     this.chatMessages = response;
-    //   }, error => {
-    //     this.chatMessages = [];
-    //   }
-    // );
+
+    for (let chatMessage of this.chatMessages) {
+      if (chatMessage.status !== ChatMessageStatus.READ) {
+        chatMessage.status = ChatMessageStatus.READ;
+        this.chatService._updateMessage(chatMessage);
+      }
+    }
+  }
+
+  public getUnreadMessageCount(user: User): number {
+    let userChatMessages = this.userChatMessageMap.get(user.id);
+    let count = 0;
+    if (userChatMessages) {
+      for (let chatMessage of userChatMessages) {
+        if (chatMessage.status !== ChatMessageStatus.READ && chatMessage.senderId !== this.currentUser.id) {
+          count++;
+        }
+      }
+    }
+
+    return count;
   }
 
   private connect(){
@@ -101,7 +133,4 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.connected = false;
   }
 
-  ngOnDestroy(): void {
-    this.disconnect()
-  }
 }

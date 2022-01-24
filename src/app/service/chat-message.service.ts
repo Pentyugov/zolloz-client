@@ -19,8 +19,8 @@ export class ChatMessageService {
     return this.httpClient.get<ChatMessage[]>(`${this.host}/chat-messages/get-room-messages/${recipient.id}`);
   }
 
-  public test(): Observable<Map<String, ChatMessage[]>> {
-    return this.httpClient.get<Map<String, ChatMessage[]>>(`${this.host}/chat-messages/test`);
+  public getUserChatMessagesMap(): Observable<Map<String, ChatMessage[]>> {
+    return this.httpClient.get<Map<String, ChatMessage[]>>(`${this.host}/chat-messages/get-user-chat-messages-map`);
   }
 
 

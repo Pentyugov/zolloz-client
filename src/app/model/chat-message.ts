@@ -1,5 +1,3 @@
-import {User} from "./user";
-
 export class ChatMessage {
   id: string;
   content: string;
@@ -7,6 +5,7 @@ export class ChatMessage {
   senderId: string;
   recipientId: string;
   chatId: string;
+  createDate: Date;
 
   constructor() {
     this.id = '';
@@ -15,5 +14,6 @@ export class ChatMessage {
     this.chatId = '';
     this.senderId ='';
     this.recipientId = '';
+    this.createDate = new Date();
   }
 }
