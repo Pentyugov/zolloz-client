@@ -29,7 +29,9 @@ body{margin-top:20px;}
 .chat-message-left,
 .chat-message-right {
   display: flex;
-  flex-shrink: 0
+  flex-shrink: 0;
+  margin-top: 10px;
+  max-width: 60rem;
 }
 
 .chat-message-left {

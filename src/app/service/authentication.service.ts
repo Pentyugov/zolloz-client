@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
-import {HttpClient, HttpErrorResponse, HttpResponse} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {User} from "../model/user";
 import {LoginRequest} from "../model/login-request";
 import {SignUpRequest} from "../model/sign-up-request";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {CustomHttpResponse} from "../model/custom-http-response";
+import {SystemRoleName} from "../enum/system-role-name.enum";
 
 @Injectable({
   providedIn: 'root'
@@ -74,6 +75,28 @@ export class AuthenticationService {
       this.logOut();
       return false;
     }
+  }
+
+  public isCurrentUserInRole(roleName: string): boolean {
+    let user: User = this.getUserFromLocalCache();
+    for (let role of user.roles) {
+      if (role.name.toLowerCase() === roleName.toLowerCase()) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public isCurrentUserAdmin(): boolean {
+    let user: User = this.getUserFromLocalCache();
+    for (let role of user.roles) {
+      if (role.name.toUpperCase() === SystemRoleName.ADMIN) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
 

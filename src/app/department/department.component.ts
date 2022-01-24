@@ -13,6 +13,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {CustomHttpResponse} from "../model/custom-http-response";
 import {Employee} from "../model/employee";
 import {EmployeeService} from "../service/employee.service";
+import {UserSessionService} from "../service/user-session.service";
 
 @Component({
   selector: 'app-department',
@@ -42,7 +43,8 @@ export class DepartmentComponent implements OnInit {
               private authenticationService: AuthenticationService,
               private applicationService: ApplicationService,
               private departmentService: DepartmentService,
-              private employeeService: EmployeeService) {
+              private employeeService: EmployeeService,
+              public userSessionService: UserSessionService) {
     this.applicationService.setActiveTab(TabName.DEPARTMENTS);
   }
 

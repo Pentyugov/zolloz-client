@@ -41,7 +41,7 @@
                   <td (click)="setSelectedDepartment(department)">{{department?.parentDepartment?.name}}</td>
                   <td>
                     <div class="btn-group">
-                      <button class="btn btn-outline-info" (click)="setDepartmentToUpdate(department)"><i class="fas fa-edit"></i></button>
+                      <button class="btn btn-outline-info" (click)="setDepartmentToUpdate(department)" *ngIf="userSessionService.isCurrentUserAdmin()"><i class="fas fa-edit"></i></button>
                       <button class="btn btn-outline-danger" id="open-department-delete-btn" data-toggle="modal" data-target="#deleteDepartmentModal"
                               (click)="setDepartmentToDelete(department)"><i class="fas fa-trash"></i></button>
                     </div>

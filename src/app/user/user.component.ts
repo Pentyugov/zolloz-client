@@ -116,6 +116,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   public addNewUserButtonAction(): void {
+    this.resetData(null)
     this.clickButton('add-new-user-btn');
   }
 

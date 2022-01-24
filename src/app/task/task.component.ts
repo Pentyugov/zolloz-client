@@ -19,6 +19,7 @@ import {TabName} from "../enum/tab-name.enum";
   styleUrls: ['./task.component.css']
 })
 export class TaskComponent implements OnInit {
+  public currentUser: User = new User();
   public tasks: Task[] = [];
   public executors: User[] = [];
   public executorId: string = '';
@@ -48,6 +49,7 @@ export class TaskComponent implements OnInit {
     this.getTasks();
     this.getExecutors();
     this.loadNextPage(this.currentPage + 1);
+    this.currentUser = this.authenticationService.getUserFromLocalCache();
   }
 
   public getTasks(page: number = 0): void {
@@ -259,6 +261,15 @@ export class TaskComponent implements OnInit {
     });
   }
 
+  public cancelTask() {
+
+  }
+
+  public isCurrentUserTaskCreatorOrInitiator(): boolean {
+    return this.currentUser.id === this.taskToUpdate.creator?.id
+      || this.currentUser.id === this.taskToUpdate.initiator?.id;
+  }
+
   private showNotification(notificationType: NotificationType, message: string): void {
     if (message) {
       this.notificationService.notify(notificationType, message);
@@ -267,7 +278,5 @@ export class TaskComponent implements OnInit {
     }
   }
 
-  public cancelTask() {
 
-  }
 }

@@ -226,8 +226,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" id="update-task-close-btn" (click)="resetData(updateTaskForm)">Close</button>
-          <button type="button" class="btn btn-primary" (click)="onUpdateTask()" [disabled]="updateTaskForm.invalid">Update task</button>
-          <button type="button" class="btn btn-success" (click)="onUpdateTask(true)" [disabled]="updateTaskForm.invalid" *ngIf="!taskToUpdate.started">Start task</button>
+          <button type="button" class="btn btn-primary" (click)="onUpdateTask()" [disabled]="updateTaskForm.invalid" *ngIf="isCurrentUserTaskCreatorOrInitiator()">Update task</button>
+          <button type="button" class="btn btn-success" (click)="onUpdateTask(true)" [disabled]="updateTaskForm.invalid" *ngIf="!taskToUpdate.started && isCurrentUserTaskCreatorOrInitiator()">Start task</button>
           <button type="button" class="btn btn-danger" (click)="cancelTask()" *ngIf="taskToUpdate.started">Cancel task</button>
         </div>
       </div>
