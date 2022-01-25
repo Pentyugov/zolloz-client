@@ -21,7 +21,8 @@
             <div *ngFor="let user of users">
               <button class="list-group-item list-group-item-action border-0" *ngIf="user.id !== currentUser.id"
                       (click)="changeChatRoom(user)">
-                <div class="badge bg-success float-right" *ngIf="getUnreadMessageCount(user) > 0">New messages: {{getUnreadMessageCount(user)}}</div>
+<!--                <div class="badge bg-success float-right" *ngIf="getUnreadMessageCount(user) > 0">New messages: {{getUnreadMessageCount(user)}}</div>-->
+                <span class="badge badge-warning float-right" *ngIf="getUnreadMessageCount(user) > 0">{{getUnreadMessageCount(user)}}</span>
                 <div class="d-flex align-items-start">
                   <img src="{{user.profileImage}}" class="rounded-circle mr-1" alt="{{user.username}}" width="40" height="40">
                   <div class="flex-grow-1 ml-3">
@@ -59,7 +60,7 @@
               </div>
 
               <div class="position-relative">
-                <div class="chat-messages p-4" style="overflow: auto; height: 580px;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+                <div class="chat-messages p-4" style="overflow: auto; height: 580px;" #scroll [scrollTop]="scroll.scrollHeight">
                   <div *ngFor="let chatMessage of chatMessages">
                     <div [ngClass]="{'chat-message-right pb-4': currentUser.id === chatMessage.senderId, 'chat-message-left pb-4': currentUser.id === chatMessage.recipientId}">
                       <div>

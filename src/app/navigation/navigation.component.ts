@@ -1,26 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {User} from "../model/user";
 import {AuthenticationService} from "../service/authentication.service";
 import {Router} from "@angular/router";
 import { Renderer2 } from '@angular/core';
+import {ChatMessageService} from "../service/chat-message.service";
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.css']
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent implements OnInit, OnDestroy {
 
   private titleSubject: BehaviorSubject<string>;
   public titleAction$: Observable<any>;
   public today$: Observable<Date>;
   public currentUser: User;
   public activeTab: string | null;
+  public newChatMessagesCount: number = 0;
 
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
-              private render:Renderer2) {
+              private render:Renderer2,
+              private chatMessageService: ChatMessageService) {
     this.activeTab = 'Main';
     if (localStorage.getItem('activeTab')) {
       this.activeTab = localStorage.getItem('activeTab');
@@ -39,6 +42,20 @@ export class NavigationComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.authenticationService.getUserFromLocalCache();
+    this.chatMessageService._connectNewChatMessagesWs(this);
+    this.getNewMessagesCount();
+  }
+
+  ngOnDestroy(): void {
+    this.chatMessageService._disconnectNewChatMessagesWs();
+  }
+
+  public getNewMessagesCount(): void {
+    this.chatMessageService.getNewMessagesCount().subscribe(
+      (response: number) => {
+        this.newChatMessagesCount = response;
+      }
+    )
   }
 
   public changeTab(url: string): void {
@@ -49,4 +66,7 @@ export class NavigationComponent implements OnInit {
     return tab === this.activeTab;
   }
 
+  public handleWsMessage() {
+    this.getNewMessagesCount();
+  }
 }

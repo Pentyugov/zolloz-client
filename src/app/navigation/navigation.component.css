@@ -1,0 +1,14 @@
+.message-count {
+  /*position: absolute;*/
+  top: 8px;
+  left: 5px;
+  width: 30px;
+  height: 30px;
+  line-height: 20px;
+  text-align: center;
+  background-color: #ff9e2a;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 600;
+  font-size: 10px;
+}

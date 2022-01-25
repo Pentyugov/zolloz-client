@@ -36,7 +36,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getUsers();
     this.currentUser = this.authenticationService.getUserFromLocalCache();
-    this.chatService = new ChatService(this, this.currentUser.id);
+    this.chatService = new ChatService(this, this.currentUser.id, this.authenticationService);
     this.connect();
     this.getUserChatMessagesMap();
   }
@@ -69,7 +69,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.chatMessageToSend.senderId = this.currentUser.id;
       this.chatMessageToSend.recipientId = this.recipient.id;
       this.chatMessageToSend.status = 10;
-      this.chatService._send(this.chatMessageToSend);
+      this.chatService._sendMessage(this.chatMessageToSend);
       this.userChatMessageMap.get(this.recipient.id)?.push(this.chatMessageToSend);
       this.chatMessageToSend = new ChatMessage();
     } else {
@@ -151,12 +151,12 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   private connect(){
-    this.chatService._connect();
+    this.chatService._connectToChat();
     this.connected = true;
   }
 
   private disconnect(){
-    this.chatService._disconnect();
+    this.chatService._disconnectFromChat();
     this.connected = false;
   }
 

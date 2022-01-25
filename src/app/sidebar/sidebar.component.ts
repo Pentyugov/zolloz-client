@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {MatSidenav} from '@angular/material/sidenav';
 import {NgForm} from "@angular/forms";
@@ -16,7 +16,7 @@ import {Notification} from "../model/notification";
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
   public notifications: Notification[] = [];
   public notificationPage = 0;
   @ViewChild(MatSidenav) sidenav!: MatSidenav;
@@ -29,8 +29,13 @@ export class SidebarComponent implements OnInit {
               private notificationService: NotificationService) {
   }
 
+  ngOnDestroy(): void {
+        this.notificationService._disconnectFromNotificationWs();
+    }
+
   ngOnInit(): void {
     this.loadNotificationPage();
+    this.notificationService._connectToNotificationWs(this);
   }
 
   public loadNotificationPage(page: number = 0) {
@@ -100,5 +105,9 @@ export class SidebarComponent implements OnInit {
         this.loadNotificationPage(this.notificationPage)
       }
     );
+  }
+
+  public handleWsMessage() {
+    this.loadNotificationPage();
   }
 }
