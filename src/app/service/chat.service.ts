@@ -22,8 +22,11 @@ export class ChatService {
     console.log("Initialize Chat WS Connection");
     let ws = new SockJS(this.webSocketEndPoint);
     this.stompChatClient = Stomp.over(ws);
+    this.stompChatClient.debug = function(str: string) {
+
+    };
     const _this = this;
-    _this.stompChatClient.connect({}, function () {
+    _this.stompChatClient.connect({'userId': this.authenticationService.getUserFromLocalCache().id}, function () {
       _this.stompChatClient.subscribe(_this.topic, function (sdkEvent: any) {
         _this.onMessageReceived(sdkEvent);
       });
@@ -38,7 +41,7 @@ export class ChatService {
   }
 
   public _sendMessage(message: ChatMessage) {
-    this.stompChatClient.send(`/api/chat`, {'Authorization': this.authenticationService.getTokenFromLocalCache()}, JSON.stringify(message));
+    this.stompChatClient.send(`/api/chat`, {}, JSON.stringify(message));
   }
 
   public _updateMessage(message: ChatMessage) {

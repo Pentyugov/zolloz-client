@@ -58,6 +58,23 @@ export class NavigationComponent implements OnInit, OnDestroy {
     )
   }
 
+  public updateMessagesCount(): void {
+    this.chatMessageService.getNewMessagesCount().subscribe(
+      (response: number) => {
+        if (response > this.newChatMessagesCount) {
+          this.playSound();
+        }
+        this.newChatMessagesCount = response;
+      }
+    )
+  }
+
+
+  public playSound(): void {
+    let audio = new Audio('assets/new-message-sound.mp3');
+    audio.play();
+  }
+
   public changeTab(url: string): void {
     this.router.navigateByUrl(url);
   }
@@ -67,6 +84,6 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   public handleWsMessage() {
-    this.getNewMessagesCount();
+    this.updateMessagesCount()
   }
 }

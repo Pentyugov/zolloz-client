@@ -49,7 +49,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatMessageService.getUserChatMessagesMap().subscribe(
       (response) => {
         Object.entries(response).forEach(([key, value])=>{
-          console.log(key, value)
           this.userChatMessageMap.set(key, value);
         });
       }
@@ -69,6 +68,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.chatMessageToSend.senderId = this.currentUser.id;
       this.chatMessageToSend.recipientId = this.recipient.id;
       this.chatMessageToSend.status = 10;
+      this.playSound();
       this.chatService._sendMessage(this.chatMessageToSend);
       this.userChatMessageMap.get(this.recipient.id)?.push(this.chatMessageToSend);
       this.chatMessageToSend = new ChatMessage();
@@ -148,6 +148,11 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (results.length === 0 || !searchTerm) {
       this.getUsers();
     }
+  }
+
+  private playSound(): void {
+    let audio = new Audio('assets/send-message-effect.mp3');
+    audio.play();
   }
 
   private connect(){

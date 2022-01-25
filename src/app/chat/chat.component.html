@@ -21,7 +21,6 @@
             <div *ngFor="let user of users">
               <button class="list-group-item list-group-item-action border-0" *ngIf="user.id !== currentUser.id"
                       (click)="changeChatRoom(user)">
-<!--                <div class="badge bg-success float-right" *ngIf="getUnreadMessageCount(user) > 0">New messages: {{getUnreadMessageCount(user)}}</div>-->
                 <span class="badge badge-warning float-right" *ngIf="getUnreadMessageCount(user) > 0">{{getUnreadMessageCount(user)}}</span>
                 <div class="d-flex align-items-start">
                   <img src="{{user.profileImage}}" class="rounded-circle mr-1" alt="{{user.username}}" width="40" height="40">
