@@ -26,7 +26,12 @@
                   <img src="{{user.profileImage}}" class="rounded-circle mr-1" alt="{{user.username}}" width="40" height="40">
                   <div class="flex-grow-1 ml-3">
                     {{user.firstName || user.lastName ? user.firstName + ' ' + user.lastName + ' (' + user.username + ') ' : user.username}}
-                    <div class="small"><span class="fas fa-circle chat-online"></span> Last login date: {{user.lastLoginDateDisplay}}</div>
+                    <div id="online" *ngIf="isUserOnline(user)">
+                      <div class="small"><span class="fas fa-circle chat-online"></span> Online</div>
+                    </div>
+                    <div id="offline" *ngIf="!isUserOnline(user)">
+                      <div class="small"><span class="fas fa-circle chat-offline"></span> Last login date: {{user.lastLoginDateDisplay}}</div>
+                    </div>
                   </div>
                 </div>
               </button>

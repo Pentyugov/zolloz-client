@@ -59,6 +59,10 @@ export class ChatMessageService {
     return this.httpClient.get<Map<String, ChatMessage[]>>(`${this.host}/chat-messages/get-user-chat-messages-map`);
   }
 
+  public getUserChatStatusMap(): Observable<Map<String, Number>> {
+    return this.httpClient.get<Map<String, Number>>(`${this.host}/chat-messages/get-user-chat-status-map`);
+  }
+
   private onMessageReceived(receivedMessage: any) {
     this.navigationComponent.handleWsMessage();
   }

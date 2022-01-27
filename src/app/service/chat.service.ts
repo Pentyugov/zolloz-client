@@ -30,6 +30,10 @@ export class ChatService {
       _this.stompChatClient.subscribe(_this.topic, function (sdkEvent: any) {
         _this.onMessageReceived(sdkEvent);
       });
+
+      _this.stompChatClient.subscribe(`/user/change-chat-status`, function (sdkEvent: any) {
+        _this.onUserChangeStatus(sdkEvent);
+      });
     }, this.errorCallBack);
   };
 
@@ -50,6 +54,11 @@ export class ChatService {
 
   private onMessageReceived(receivedMessage: any) {
     this.chatComponent.handleMessage(JSON.parse(receivedMessage.body));
+  }
+
+
+  private onUserChangeStatus(receivedMessage: any) {
+    this.chatComponent.onUserChangeStatus();
   }
 
   errorCallBack(error: any) {

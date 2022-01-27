@@ -1,10 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {User} from "../model/user";
 import {AuthenticationService} from "../service/authentication.service";
 import {Router} from "@angular/router";
-import { Renderer2 } from '@angular/core';
 import {ChatMessageService} from "../service/chat-message.service";
+import {UserSettings} from "../model/user-settings";
+import {ApplicationService} from "../service/application.service";
 
 @Component({
   selector: 'app-navigation',
@@ -19,9 +20,11 @@ export class NavigationComponent implements OnInit, OnDestroy {
   public currentUser: User;
   public activeTab: string | null;
   public newChatMessagesCount: number = 0;
+  private userSettings: UserSettings = new UserSettings();
 
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
+              private applicationService: ApplicationService,
               private render:Renderer2,
               private chatMessageService: ChatMessageService) {
     this.activeTab = 'Main';
@@ -44,6 +47,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.currentUser = this.authenticationService.getUserFromLocalCache();
     this.chatMessageService._connectNewChatMessagesWs(this);
     this.getNewMessagesCount();
+    this.userSettings = this.applicationService.getUserSettingsFromLocalCache();
   }
 
   ngOnDestroy(): void {
@@ -62,7 +66,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.chatMessageService.getNewMessagesCount().subscribe(
       (response: number) => {
         if (response > this.newChatMessagesCount) {
-          this.playSound();
+          if (this.userSettings.enableChatNotificationSound) {
+            this.playSound();
+          }
         }
         this.newChatMessagesCount = response;
       }

@@ -8,6 +8,7 @@ import {ChatMessage} from "../model/chat-message";
 import {ChatService} from "../service/chat.service";
 import {ChatMessageService} from "../service/chat-message.service";
 import {ChatMessageStatus} from "../enum/chat-message-status.enum";
+import {UserSettings} from "../model/user-settings";
 
 @Component({
   selector: 'app-chat',
@@ -23,6 +24,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   public chatMessages: ChatMessage[] = [];
   public chatService: ChatService;
   public userChatMessageMap: Map<String, ChatMessage[]> = new Map<String, ChatMessage[]>();
+  public userChatStatusMap: Map<String, Number> = new Map<String, Number>();
+  private userSettings: UserSettings = new UserSettings();
   connected: boolean = false;
 
   constructor(private applicationService: ApplicationService,
@@ -39,6 +42,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatService = new ChatService(this, this.currentUser.id, this.authenticationService);
     this.connect();
     this.getUserChatMessagesMap();
+    this.getUserChatStatusMap();
+    this.userSettings = this.applicationService.getUserSettingsFromLocalCache();
   }
 
   ngOnDestroy(): void {
@@ -52,7 +57,21 @@ export class ChatComponent implements OnInit, OnDestroy {
           this.userChatMessageMap.set(key, value);
         });
       }
-    )
+    );
+  }
+
+  public getUserChatStatusMap(): void {
+    this.chatMessageService.getUserChatStatusMap().subscribe(
+      (response) => {
+        Object.entries(response).forEach(([key, value])=>{
+          this.userChatStatusMap.set(key, value);
+        });
+      }
+    );
+  }
+
+  public isUserOnline(user: User): boolean {
+    return this.userChatStatusMap.get(user.id) === 20;
   }
 
   public getUsers(): void {
@@ -150,6 +169,10 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
   }
 
+  public onUserChangeStatus() {
+    this.getUserChatStatusMap();
+  }
+
   private playSound(): void {
     let audio = new Audio('assets/send-message-effect.mp3');
     audio.play();
@@ -164,7 +187,5 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatService._disconnectFromChat();
     this.connected = false;
   }
-
-
 
 }

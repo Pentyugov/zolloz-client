@@ -8,6 +8,8 @@ import {UserService} from "../service/user.service";
 import {NotificationService} from "../service/notification.service";
 import {ApplicationService} from "../service/application.service";
 import {TabName} from "../enum/tab-name.enum";
+import {UserSettings} from "../model/user-settings";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-settings',
@@ -17,16 +19,18 @@ import {TabName} from "../enum/tab-name.enum";
 export class SettingsComponent implements OnInit {
 
   public refreshing: boolean = false;
+  public userSettings: UserSettings = new UserSettings();
   private subscriptions: Subscription[] = [];
 
   constructor(private userService: UserService,
               private notificationService: NotificationService,
-              private applicationService: ApplicationService) {
+              private applicationService: ApplicationService,
+              private router: Router) {
     this.applicationService.setActiveTab(TabName.SETTINGS);
   }
 
   ngOnInit(): void {
-
+    this.userSettings = this.applicationService.getUserSettingsFromLocalCache();
   }
 
   public resetPassword(emailForm: NgForm, email: string): void {
@@ -48,6 +52,17 @@ export class SettingsComponent implements OnInit {
     } else {
       this.notificationService.notify(notificationType, 'An error occurred. Please try again.');
     }
+  }
+
+  public saveSettings() {
+    this.applicationService.saveUserSettings(this.userSettings).subscribe(
+      (response: CustomHttpResponse) => {
+        this.showNotification(NotificationType.WARNING, response.message);
+        this.applicationService.saveUserSettingsToLocalCache(this.userSettings);
+        this.router.navigateByUrl('/main');
+      }, (errorResponse: HttpErrorResponse) => {
+        this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+      });
   }
 
 }

@@ -1,4 +1,20 @@
 <app-sidebar>
+  <div id="chat-settings">
+    <form>
+    <fieldset>
+      <legend>Chat settings</legend>
+      <div class="form-group">
+        <fieldset class="form-group">
+          <div class="form-check">
+            <input name="active" type="checkbox" class="form-check-input" [(ngModel)] = userSettings.enableChatNotificationSound>
+            <label class="form-check-label">Enable chat notification sound</label>
+          </div>
+        </fieldset>
+      </div>
+      <button class="btn btn-success" (click)="saveSettings()">Save</button>
+    </fieldset>
+    </form>
+  </div>
   <div id="reset-password">
     <form #resetPasswordForm="ngForm" >
       <fieldset>

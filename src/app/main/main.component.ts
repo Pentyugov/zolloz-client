@@ -12,6 +12,7 @@ import {CustomHttpResponse} from "../model/custom-http-response";
 import {NgForm} from "@angular/forms";
 import {Task} from "../model/task";
 import {TaskService} from "../service/task.service";
+import {UserSettings} from "../model/user-settings";
 
 @Component({
   selector: 'app-main',
@@ -26,6 +27,7 @@ export class MainComponent implements OnInit, OnDestroy {
   public highPriorityTasks: Task[] = [];
   public noteToDelete: Note;
   public noteToUpdate: Note = new Note();
+  private userSettings: UserSettings = new UserSettings();
 
   constructor(private applicationService: ApplicationService,
               private noteService: NoteService,
@@ -36,12 +38,22 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loadUserSettings();
     this.getNotes(false);
     this.getTasks();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  public loadUserSettings(): void {
+    this.applicationService.loadUserSettings().subscribe(
+      (response: UserSettings) => {
+        this.userSettings = response;
+        this.applicationService.saveUserSettingsToLocalCache(this.userSettings);
+      }
+    )
   }
 
   public getNotes(showNotification: boolean): void {
@@ -79,10 +91,6 @@ export class MainComponent implements OnInit, OnDestroy {
       }
     );
 
-  }
-
-  public getUserName(): void {
-    console.log('test ')
   }
 
   public setNoteToDelete(note: Note): void {
