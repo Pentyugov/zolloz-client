@@ -32,6 +32,9 @@ export class ChatMessageService {
     console.log("Initialize New Chat Messages WS Connection");
     let ws = new SockJS(_this.webSocketEndPoint);
     _this.stompNewChatMessagesClient = Stomp.over(ws);
+    _this.stompNewChatMessagesClient.debug = function(str: string) {
+
+    };
 
     _this.stompNewChatMessagesClient.connect({}, function () {
       _this.stompNewChatMessagesClient.subscribe(_this.topic, function (sdkEvent: any) {

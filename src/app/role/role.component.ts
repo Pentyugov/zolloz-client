@@ -10,6 +10,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {NotificationService} from "../service/notification.service";
 import {Position} from "../model/position";
 import {CustomHttpResponse} from "../model/custom-http-response";
+import {UserSessionService} from "../service/user-session.service";
 
 @Component({
   selector: 'app-role',
@@ -28,7 +29,8 @@ export class RoleComponent implements OnInit {
   constructor(private applicationService: ApplicationService,
               private authenticationService: AuthenticationService,
               private roleService: RoleService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              public userSessionService: UserSessionService) {
     this.applicationService.setActiveTab(TabName.ROLE);
   }
 

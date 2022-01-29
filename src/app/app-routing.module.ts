@@ -15,6 +15,7 @@ import {EmployeeComponent} from "./employee/employee.component";
 import {RoleComponent} from "./role/role.component";
 import {ChangePasswordComponent} from "./change-password/change-password.component";
 import {ChatComponent} from "./chat/chat.component";
+import {ScreenGuard} from "./guard/screen.guard";
 
 const routes: Routes = [
   {path: 'main', component: MainComponent, canActivate: [AuthenticationGuard]},
@@ -29,7 +30,7 @@ const routes: Routes = [
   {path: 'settings', component: SettingsComponent, canActivate: [AuthenticationGuard]},
   {path: 'profile', component: ProfileComponent, canActivate: [AuthenticationGuard]},
   {path: 'sidebar', component: SidebarComponent, canActivate: [AuthenticationGuard]},
-  {path: 'roles', component: RoleComponent, canActivate: [AuthenticationGuard]},
+  {path: 'roles', component: RoleComponent, canActivate: [AuthenticationGuard, ScreenGuard]},
   {path: 'chat', component: ChatComponent, canActivate: [AuthenticationGuard]},
   {path: '', redirectTo: '/login', pathMatch: 'full', },
 ];

@@ -228,7 +228,7 @@
           <button type="button" class="btn btn-secondary" data-dismiss="modal" id="update-task-close-btn" (click)="resetData(updateTaskForm)">Close</button>
           <button type="button" class="btn btn-primary" (click)="onUpdateTask()" [disabled]="updateTaskForm.invalid" *ngIf="isCurrentUserTaskCreatorOrInitiator()">Update task</button>
           <button type="button" class="btn btn-success" (click)="onUpdateTask(true)" [disabled]="updateTaskForm.invalid" *ngIf="!taskToUpdate.started && isCurrentUserTaskCreatorOrInitiator()">Start task</button>
-          <button type="button" class="btn btn-danger" (click)="cancelTask()" *ngIf="taskToUpdate.started">Cancel task</button>
+          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelTaskModal" *ngIf="taskToUpdate.started">Cancel task</button>
         </div>
       </div>
     </div>
@@ -249,6 +249,27 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
             <button (click)="onDeleteTask(taskToDelete.id)" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--    modal cancel task-->
+  <div class="modal fade" id="cancelTaskModal" tabindex="-1" role="dialog" aria-labelledby="cancelModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="cancelModelLabel">Delete Task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-task-cancel-modal">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to cancel task: {{taskToUpdate?.number}}?</p>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="task-cancel-modal-no-btn" data-dismiss="modal">No</button>
+            <button (click)="cancelTask()" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
           </div>
         </div>
       </div>

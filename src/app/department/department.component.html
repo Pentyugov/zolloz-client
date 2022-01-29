@@ -16,7 +16,8 @@
                     <input name="searchTerm" #searchInput="ngModel" class="form-control mr-sm-2" ngModel (ngModelChange)="search(searchInput.value)"
                            type="search" placeholder="Search departments...">
                   </form>
-                  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addDepartmentModal"><i class="fa fa-plus"></i>&nbsp;New Department</button>
+                  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addDepartmentModal"
+                          *ngIf="userSessionService.canEdit() || userSessionService.canDelete()"><i class="fa fa-plus"></i>&nbsp;New Department</button>
                 </div>
                 <div class="btn-group">
                   <button type="button" class="btn btn-info" (click)="getDepartments(true)">
@@ -31,6 +32,7 @@
                   <th>Code</th>
                   <th>Head</th>
                   <th>Parent department</th>
+                  <th *ngIf="userSessionService.canEdit() || userSessionService.canDelete()">Actions</th>
                 </tr>
                 </thead>
                 <tbody *ngFor="let department of departments">
@@ -41,9 +43,9 @@
                   <td (click)="setSelectedDepartment(department)">{{department?.parentDepartment?.name}}</td>
                   <td>
                     <div class="btn-group">
-                      <button class="btn btn-outline-info" (click)="setDepartmentToUpdate(department)" *ngIf="userSessionService.isCurrentUserAdmin()"><i class="fas fa-edit"></i></button>
+                      <button class="btn btn-outline-info" (click)="setDepartmentToUpdate(department)" *ngIf="userSessionService.canEdit()"><i class="fas fa-edit"></i></button>
                       <button class="btn btn-outline-danger" id="open-department-delete-btn" data-toggle="modal" data-target="#deleteDepartmentModal"
-                              (click)="setDepartmentToDelete(department)"><i class="fas fa-trash"></i></button>
+                              (click)="setDepartmentToDelete(department)" *ngIf="userSessionService.canDelete()"><i class="fas fa-trash"></i></button>
                     </div>
                   </td>
                 </tr>

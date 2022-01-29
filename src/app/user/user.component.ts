@@ -15,6 +15,8 @@ import {TabName} from "../enum/tab-name.enum";
 import {IDropdownSettings} from "ng-multiselect-dropdown";
 import {Role} from "../model/role";
 import {RoleService} from "../service/role.service";
+import {DepartmentService} from "../service/department.service";
+import {UserSessionService} from "../service/user-session.service";
 
 @Component({
   selector: 'app-user',
@@ -48,7 +50,8 @@ export class UserComponent implements OnInit, OnDestroy {
               private notificationService: NotificationService,
               private authenticationService: AuthenticationService,
               private applicationService: ApplicationService,
-              private roleService: RoleService) {
+              private roleService: RoleService,
+              public userSessionService: UserSessionService) {
     this.titleSubject = new BehaviorSubject<string>('Users');
     this.titleAction$ = this.titleSubject.asObservable();
     this.subscriptions = [];
@@ -64,7 +67,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getUsers(true);
+    this.getUsers(false);
     this.getRoles();
     this.currentUser = this.authenticationService.getUserFromLocalCache();
 

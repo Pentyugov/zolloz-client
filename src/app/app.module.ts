@@ -18,18 +18,19 @@ import { PositionComponent } from './position/position.component';
 import { TaskComponent } from './task/task.component';
 import { MainComponent } from './main/main.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MaterialModule} from "./meterial.module";
+import { MaterialModule } from "./meterial.module";
 import { NavigationComponent } from './navigation/navigation.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import {ScrollingModule} from "@angular/cdk/scrolling";
+import { ScrollingModule } from "@angular/cdk/scrolling";
 import { EmployeeComponent } from './employee/employee.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 import { RoleComponent } from './role/role.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { ChatComponent } from './chat/chat.component';
+import { ScreenGuard } from "./guard/screen.guard";
 
 @NgModule({
   declarations: [
@@ -63,7 +64,7 @@ import { ChatComponent } from './chat/chat.component';
     NgMultiSelectDropDownModule.forRoot(),
     ReactiveFormsModule
   ],
-  providers: [NotificationService, AuthenticationGuard, AuthenticationService, UserService,
+  providers: [NotificationService, AuthenticationGuard, ScreenGuard, AuthenticationService, UserService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })

@@ -14,6 +14,7 @@ import {CustomHttpResponse} from "../model/custom-http-response";
 import {Employee} from "../model/employee";
 import {EmployeeService} from "../service/employee.service";
 import {UserSessionService} from "../service/user-session.service";
+import {SystemRoleName} from "../enum/system-role-name.enum";
 
 @Component({
   selector: 'app-department',
@@ -49,7 +50,7 @@ export class DepartmentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getDepartments(true);
+    this.getDepartments(false);
     this.getEmployees(false);
   }
 
@@ -195,7 +196,7 @@ export class DepartmentComponent implements OnInit {
   public resetCreateParentDepartmentInput(): void {
     this.departmentToCreate.parentDepartment = null;
     this.selectedParentDepartment = null;
-}
+  }
 
   public updateSelectedParentDepartment(event:any) {
     if (event.target.value !== 'null') {

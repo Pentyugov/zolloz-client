@@ -45,5 +45,14 @@ export class UserSessionService {
     return false;
   }
 
-  
+  public canEdit(): boolean {
+    return this.isCurrentUserAdmin() ||
+           this.isCurrentUserAppEditor();
+  }
+
+  public canDelete(): boolean {
+    return this.isCurrentUserAdmin();
+  }
+
+
 }

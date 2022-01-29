@@ -15,6 +15,7 @@ import {DepartmentService} from "../service/department.service";
 import {Department} from "../model/department";
 import {Position} from "../model/position";
 import {User} from "../model/user";
+import {UserSessionService} from "../service/user-session.service";
 
 @Component({
   selector: 'app-employee',
@@ -46,12 +47,13 @@ export class EmployeeComponent implements OnInit {
               private applicationService: ApplicationService,
               private positionService: PositionService,
               private employeeService: EmployeeService,
-              private departmentService: DepartmentService) {
+              private departmentService: DepartmentService,
+              public userSessionService: UserSessionService) {
     this.applicationService.setActiveTab('Employees');
   }
 
   ngOnInit(): void {
-    this.getEmployees(true);
+    this.getEmployees(false);
   }
 
   public getEmployees(showNotification: boolean): void {

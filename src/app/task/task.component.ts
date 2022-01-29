@@ -262,7 +262,15 @@ export class TaskComponent implements OnInit {
   }
 
   public cancelTask() {
-
+    this.taskService.cancelTask(this.taskToUpdate.id).subscribe((response: CustomHttpResponse) => {
+      this.clickButton('task-cancel-modal-no-btn');
+      this.clickButton('update-task-close-btn');
+      this.getTasks();
+      this.resetData(null);
+      this.showNotification(NotificationType.INFO, response.message);
+    }, (errorResponse: HttpErrorResponse) => {
+      this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+    });
   }
 
   public isCurrentUserTaskCreatorOrInitiator(): boolean {

@@ -43,6 +43,10 @@ export class TaskService {
     return this.httpClient.get<CustomHttpResponse>(`${this.host}/task/start-task/${id}`);
   }
 
+  public cancelTask(id: string): Observable<CustomHttpResponse> {
+    return this.httpClient.get<CustomHttpResponse>(`${this.host}/task/cancel-task/${id}`);
+  }
+
   cloneTask(taskToClone: Task) {
     let task = new Task();
     task.id = taskToClone.id;

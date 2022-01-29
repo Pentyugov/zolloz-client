@@ -34,6 +34,9 @@ export class NotificationService {
     console.log("Initialize Notification WS Connection");
     let ws = new SockJS(_this.webSocketEndPoint);
     _this.stompNotificationClient = Stomp.over(ws);
+    _this.stompNotificationClient.debug = function(str: string) {
+
+    };
 
     _this.stompNotificationClient.connect({}, function () {
       _this.stompNotificationClient.subscribe(_this.topic, function (sdkEvent: any) {

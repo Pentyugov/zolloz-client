@@ -11,6 +11,8 @@ import {NotificationType} from "../enum/notification-type.enum";
 import {CustomHttpResponse} from "../model/custom-http-response";
 import {HttpErrorResponse} from "@angular/common/http";
 import {NgForm} from "@angular/forms";
+import {DepartmentService} from "../service/department.service";
+import {UserSessionService} from "../service/user-session.service";
 
 @Component({
   selector: 'app-position',
@@ -30,12 +32,13 @@ export class PositionComponent implements OnInit {
               private notificationService: NotificationService,
               private authenticationService: AuthenticationService,
               private applicationService: ApplicationService,
-              private positionService: PositionService) {
+              private positionService: PositionService,
+              public userSessionService: UserSessionService) {
     this.applicationService.setActiveTab(TabName.POSITIONS);
   }
 
   ngOnInit(): void {
-    this.getPositions(true);
+    this.getPositions(false);
   }
 
   public getPositions(showNotification: boolean): void {
