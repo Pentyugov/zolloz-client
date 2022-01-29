@@ -43,8 +43,12 @@ export class TaskService {
     return this.httpClient.get<CustomHttpResponse>(`${this.host}/task/start-task/${id}`);
   }
 
-  public cancelTask(id: string): Observable<CustomHttpResponse> {
-    return this.httpClient.get<CustomHttpResponse>(`${this.host}/task/cancel-task/${id}`);
+  public cancelTask(id: string, comment: string): Observable<CustomHttpResponse> {
+    return this.httpClient.post<CustomHttpResponse>(`${this.host}/task/cancel-task/${id}`, comment);
+  }
+
+  public executeTask(id: string, comment: string | boolean): Observable<CustomHttpResponse> {
+    return this.httpClient.post<CustomHttpResponse>(`${this.host}/task/execute-task/${id}`, comment);
   }
 
   cloneTask(taskToClone: Task) {

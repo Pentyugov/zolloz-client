@@ -61,9 +61,9 @@
 
           <td>
             <div class="btn-group">
-              <button class="btn btn-outline-info" (click)="setTaskToUpdate(task)"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-outline-info" (click)="setTaskToUpdate(task)" *ngIf="isTaskEditButtonEnabled(task)"><i class="fas fa-edit"></i></button>
               <button class="btn btn-outline-danger" id="open-task-delete-btn" data-toggle="modal" data-target="#deleteTaskModal"
-                      (click)="setTaskToDelete(task)"><i class="fas fa-trash"></i></button>
+                      (click)="setTaskToDelete(task)" *ngIf="isTaskDeleteButtonEnabled()"><i class="fas fa-trash"></i></button>
             </div>
           </td>
         </tr>
@@ -172,13 +172,21 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="required control-label">Number&nbsp;</label>
-                  <input type="text" name="number" required ngModel class="form-control" [(ngModel)]="taskToUpdate.number">
+                  <input type="text"
+                         name="number"
+                         required ngModel
+                         class="form-control"
+                         [disabled]="!isFieldsEnabled()"
+                         [(ngModel)]="taskToUpdate.number">
                 </div>
               </div>
               <div class="col-md-6 ml-auto">
                 <div class="form-group">
                   <label class="required control-label">Priority&nbsp;</label>
-                  <select name="userId" class="form-control" [(ngModel)]="taskToUpdate.priority">
+                  <select name="userId"
+                          class="form-control"
+                          [disabled]="!isFieldsEnabled()"
+                          [(ngModel)]="taskToUpdate.priority">
                     <option value="10" selected>Low</option>
                     <option value="20" selected>Medium</option>
                     <option value="30" selected>High</option>
@@ -188,13 +196,32 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <label>Description&nbsp;</label>
-                  <textarea type="text" name="description" ngModel maxlength="240" placeholder="max length 240" class="form-control" cols="40" rows="4" [(ngModel)]="taskToUpdate.description"></textarea>
+                  <textarea type="text"
+                            name="description"
+                            ngModel
+                            maxlength="240"
+                            placeholder="max length 240"
+                            class="form-control"
+                            cols="40"
+                            rows="4"
+                            [disabled]="!isFieldsEnabled()" [(ngModel)]="taskToUpdate.description">
+                  </textarea>
                 </div>
               </div>
               <div class="col-md-12">
                 <div class="form-group">
                   <label>Comment&nbsp;</label>
-                  <textarea type="text" name="comment" ngModel maxlength="240" placeholder="max length 240" class="form-control" cols="40" rows="3" [(ngModel)]="taskToUpdate.comment"></textarea>
+                  <textarea type="text"
+                            name="comment"
+                            ngModel
+                            maxlength="240"
+                            placeholder="max length 240"
+                            class="form-control"
+                            cols="40"
+                            rows="3"
+                            [disabled]="!isFieldsEnabled()"
+                            [(ngModel)]="taskToUpdate.comment">
+                  </textarea>
                 </div>
               </div>
             </div>
@@ -203,13 +230,22 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="required control-label">Due date&nbsp;</label>
-                  <input type="date" name="executionDatePlan" ngModel class="form-control" (change)="updateExecutionDatePlan($event)" [valueAsDate]="executionDatePlan">
+                  <input type="date"
+                         name="executionDatePlan"
+                         ngModel
+                         class="form-control"
+                         [disabled]="!isFieldsEnabled()"
+                         (change)="updateExecutionDatePlan($event)"
+                         [valueAsDate]="executionDatePlan">
                 </div>
               </div>
               <div class="col-md-6 ml-auto">
                 <div class="form-group">
                   <label>Executor&nbsp;</label>
-                  <select name="executor" class="form-control" [(ngModel)]="executorId">
+                  <select name="executor"
+                          class="form-control"
+                          [disabled]="!isFieldsEnabled()"
+                          [(ngModel)]="executorId">
                     <option [value]="executor.id" *ngFor="let executor of executors">{{executor.username}}</option>
                   </select>
                 </div>
@@ -225,10 +261,36 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="update-task-close-btn" (click)="resetData(updateTaskForm)">Close</button>
-          <button type="button" class="btn btn-primary" (click)="onUpdateTask()" [disabled]="updateTaskForm.invalid" *ngIf="isCurrentUserTaskCreatorOrInitiator()">Update task</button>
-          <button type="button" class="btn btn-success" (click)="onUpdateTask(true)" [disabled]="updateTaskForm.invalid" *ngIf="!taskToUpdate.started && isCurrentUserTaskCreatorOrInitiator()">Start task</button>
-          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelTaskModal" *ngIf="taskToUpdate.started">Cancel task</button>
+          <button type="button"
+                  id="update-task-close-btn"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                  (click)="resetData(updateTaskForm)">Close</button>
+
+          <button type="button"
+                  class="btn btn-primary"
+                  (click)="onUpdateTask()"
+                  [disabled]="updateTaskForm.invalid"
+                  *ngIf="isCurrentUserTaskCreatorOrInitiator()">Update task</button>
+
+          <button type="button"
+                  class="btn btn-success"
+                  (click)="onUpdateTask(true)"
+                  [disabled]="updateTaskForm.invalid"
+                  *ngIf="!taskToUpdate.started && isCurrentUserTaskCreatorOrInitiator()">Start task</button>
+
+          <button type="button"
+                  class="btn btn-danger"
+                  data-toggle="modal"
+                  data-target="#cancelTaskModal"
+                  *ngIf="isCancelButtonEnabled()">Cancel task</button>
+
+          <button type="button"
+                  class="btn btn-success"
+                  data-toggle="modal"
+                  data-target="#executeTaskModal"
+                  *ngIf="isExecuteButtonEnabled()">Execute task</button>
+
         </div>
       </div>
     </div>
@@ -260,16 +322,51 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="cancelModelLabel">Delete Task</h5>
+          <h5 class="modal-title" id="cancelModelLabel">Cancel Task</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-task-cancel-modal">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
+          <form #cancelTaskForm="ngForm" (ngSubmit)="cancelTask(cancelTaskForm)">
           <p>Are you sure you want to cancel task: {{taskToUpdate?.number}}?</p>
+          <div class="form-group">
+            <label class="required control-label">Comment&nbsp;</label>
+            <textarea id="comment" name="comment" ngModel cols="63" rows="3">{{taskSelected.description}}</textarea>
+          </div>
+            <button type="submit" style="display: none;" id="cancel-task-btn"></button>
+          </form>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" id="task-cancel-modal-no-btn" data-dismiss="modal">No</button>
-            <button (click)="cancelTask()" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-danger" (click)="clickButton('cancel-task-btn')" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--    modal execute task-->
+  <div class="modal fade" id="executeTaskModal" tabindex="-1" role="dialog" aria-labelledby="executeModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="executeModelLabel">Execute Task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-task-execute-modal">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #executeTaskForm="ngForm" (ngSubmit)="executeTask(executeTaskForm)">
+            <p>Execute task: {{taskToUpdate?.number}}?</p>
+            <div class="form-group">
+              <label class="required control-label">Comment&nbsp;</label>
+              <textarea id="executeComment" name="comment" ngModel cols="63" rows="3">{{taskSelected.description}}</textarea>
+            </div>
+            <button type="submit" style="display: none;" id="execute-task-btn"></button>
+          </form>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="task-execute-modal-no-btn" data-dismiss="modal">No</button>
+            <button type="submit" class="btn btn-success" (click)="clickButton('execute-task-btn')" data-bs-dismiss="modal">Execute</button>
           </div>
         </div>
       </div>

@@ -12,6 +12,7 @@ import {NotificationType} from "../enum/notification-type.enum";
 import {HttpErrorResponse} from "@angular/common/http";
 import {CustomHttpResponse} from "../model/custom-http-response";
 import {TabName} from "../enum/tab-name.enum";
+import {UserSessionService} from "../service/user-session.service";
 
 @Component({
   selector: 'app-task',
@@ -41,7 +42,8 @@ export class TaskComponent implements OnInit {
               private notificationService: NotificationService,
               private authenticationService: AuthenticationService,
               private applicationService: ApplicationService,
-              private taskService: TaskService) {
+              private taskService: TaskService,
+              private userSessionService: UserSessionService) {
     this.applicationService.setActiveTab(TabName.TASKS);
   }
 
@@ -150,7 +152,7 @@ export class TaskComponent implements OnInit {
     }
   }
 
-  private clickButton(buttonId: string) {
+  public clickButton(buttonId: string) {
     document.getElementById(buttonId)?.click();
   }
 
@@ -261,9 +263,23 @@ export class TaskComponent implements OnInit {
     });
   }
 
-  public cancelTask() {
-    this.taskService.cancelTask(this.taskToUpdate.id).subscribe((response: CustomHttpResponse) => {
+  public cancelTask(ngForm: NgForm) {
+    let comment = ngForm.value.comment;
+    this.taskService.cancelTask(this.taskToUpdate.id, comment).subscribe((response: CustomHttpResponse) => {
       this.clickButton('task-cancel-modal-no-btn');
+      this.clickButton('update-task-close-btn');
+      this.getTasks();
+      this.resetData(null);
+      this.showNotification(NotificationType.INFO, response.message);
+    }, (errorResponse: HttpErrorResponse) => {
+      this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+    });
+  }
+
+  public executeTask(ngForm: NgForm) {
+    let comment = ngForm.value.comment;
+    this.taskService.executeTask(this.taskToUpdate.id, comment).subscribe((response: CustomHttpResponse) => {
+      this.clickButton('task-execute-modal-no-btn');
       this.clickButton('update-task-close-btn');
       this.getTasks();
       this.resetData(null);
@@ -284,6 +300,54 @@ export class TaskComponent implements OnInit {
     } else {
       this.notificationService.notify(notificationType, 'An error occurred. Please try again.');
     }
+  }
+
+
+  public isTaskEditButtonEnabled(task: Task):boolean {
+    return this.userSessionService.isCurrentUserAdmin() ||
+           task.executor?.id === this.currentUser.id ||
+           task.creator?.id === this.currentUser.id ||
+           task.initiator?.id === this.currentUser.id;
+  }
+
+  public isTaskDeleteButtonEnabled() {
+    return this.userSessionService.isCurrentUserAdmin();
+  }
+
+  public isFieldsEnabled(): boolean {
+    if (this.userSessionService.isCurrentUserAdmin()) {
+      return true;
+    }
+
+    if (this.taskToUpdate.started) {
+      return false;
+    }
+
+    if (this.taskToUpdate.creator?.id === this.currentUser.id) {
+      return true;
+    }
+
+    if (this.taskToUpdate.initiator?.id === this.currentUser.id) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public isCancelButtonEnabled(): boolean {
+    if (this.taskToUpdate.started) {
+      return this.userSessionService.isCurrentUserAdmin() ||
+             this.taskToUpdate.creator?.id === this.currentUser.id ||
+             this.taskToUpdate.initiator?.id === this.currentUser.id;
+    }
+
+    return false;
+  }
+
+
+  public isExecuteButtonEnabled(): boolean {
+    return this.taskToUpdate.started &&
+      (this.taskToUpdate.executor?.id === this.currentUser.id || this.userSessionService.isCurrentUserAdmin()) ;
   }
 
 
