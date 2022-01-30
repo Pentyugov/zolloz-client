@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {CustomHttpResponse} from "../model/custom-http-response";
 import {Task} from "../model/task";
+import {CardHistory} from "../model/card-history";
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,18 @@ export class TaskService {
 
   public executeTask(id: string, comment: string | boolean): Observable<CustomHttpResponse> {
     return this.httpClient.post<CustomHttpResponse>(`${this.host}/task/execute-task/${id}`, comment);
+  }
+
+  public reworkTask(id: string, comment: string | boolean): Observable<CustomHttpResponse> {
+    return this.httpClient.post<CustomHttpResponse>(`${this.host}/task/rework-task/${id}`, comment);
+  }
+
+  public finishTask(id: string, comment: string | boolean): Observable<CustomHttpResponse> {
+    return this.httpClient.post<CustomHttpResponse>(`${this.host}/task/finish-task/${id}`, comment);
+  }
+
+  public getTaskHistory(id: string): Observable<CardHistory[]> {
+    return this.httpClient.get<CardHistory[]>(`${this.host}/task/get-history/${id}`);
   }
 
   cloneTask(taskToClone: Task) {

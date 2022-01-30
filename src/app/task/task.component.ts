@@ -13,6 +13,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {CustomHttpResponse} from "../model/custom-http-response";
 import {TabName} from "../enum/tab-name.enum";
 import {UserSessionService} from "../service/user-session.service";
+import {CardHistory} from "../model/card-history";
 
 @Component({
   selector: 'app-task',
@@ -34,6 +35,7 @@ export class TaskComponent implements OnInit {
   public paginationButtonLast: number = 3;
   public paginationActiveButton = 'first';
   public executionDatePlan: Date | null = null;
+  public cardHistory: CardHistory[] = [];
   private nextTaskPage: Task[] = [];
 
   public refreshing = false;
@@ -165,6 +167,7 @@ export class TaskComponent implements OnInit {
   this.taskToCreate = new Task();
   this.taskToUpdate = new Task();
   this.taskToDelete = new Task();
+  this.cardHistory = [];
   this.executorId = '';
   if (ngForm) {
     ngForm.reset();
@@ -289,6 +292,40 @@ export class TaskComponent implements OnInit {
     });
   }
 
+  public reworkTask(ngForm: NgForm) {
+    let comment = ngForm.value.comment;
+    this.taskService.reworkTask(this.taskToUpdate.id, comment).subscribe((response: CustomHttpResponse) => {
+      this.clickButton('task-rework-modal-no-btn');
+      this.clickButton('update-task-close-btn');
+      this.getTasks();
+      this.resetData(null);
+      this.showNotification(NotificationType.INFO, response.message);
+    }, (errorResponse: HttpErrorResponse) => {
+      this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+    });
+  }
+
+  public finishTask(ngForm: NgForm) {
+    let comment = ngForm.value.comment;
+    this.taskService.finishTask(this.taskToUpdate.id, comment).subscribe((response: CustomHttpResponse) => {
+      this.clickButton('task-finish-modal-no-btn');
+      this.clickButton('update-task-close-btn');
+      this.getTasks();
+      this.resetData(null);
+      this.showNotification(NotificationType.INFO, response.message);
+    }, (errorResponse: HttpErrorResponse) => {
+      this.showNotification(NotificationType.ERROR, errorResponse.error.message);
+    });
+  }
+
+  public loadTaskHistory(): void {
+    this.taskService.getTaskHistory(this.taskSelected.id).subscribe(
+      (response: CardHistory[]) => {
+        this.cardHistory = response;
+      }
+    )
+  }
+
   public isCurrentUserTaskCreatorOrInitiator(): boolean {
     return this.currentUser.id === this.taskToUpdate.creator?.id
       || this.currentUser.id === this.taskToUpdate.initiator?.id;
@@ -302,12 +339,22 @@ export class TaskComponent implements OnInit {
     }
   }
 
+  public isUpdateButtonEnabled(): boolean {
+    if (this.userSessionService.isCurrentUserAdmin()) {
+      return true;
+    }
+
+    return this.isCurrentUserTaskCreatorOrInitiator() &&
+           this.taskToUpdate.state !== Task.STATE_ASSIGNED &&
+           this.taskToUpdate.state !== Task.STATE_REWORK;
+  }
+
 
   public isTaskEditButtonEnabled(task: Task):boolean {
     return this.userSessionService.isCurrentUserAdmin() ||
            task.executor?.id === this.currentUser.id ||
-           task.creator?.id === this.currentUser.id ||
-           task.initiator?.id === this.currentUser.id;
+           task.initiator?.id === this.currentUser.id ||
+           task.creator?.id === this.currentUser.id ;
   }
 
   public isTaskDeleteButtonEnabled() {
@@ -319,26 +366,16 @@ export class TaskComponent implements OnInit {
       return true;
     }
 
-    if (this.taskToUpdate.started) {
-      return false;
+    if (this.taskToUpdate.state !== Task.STATE_ASSIGNED && this.taskToUpdate.state !== Task.STATE_REWORK) {
+      return this.isCurrentUserTaskCreatorOrInitiator();
     }
-
-    if (this.taskToUpdate.creator?.id === this.currentUser.id) {
-      return true;
-    }
-
-    if (this.taskToUpdate.initiator?.id === this.currentUser.id) {
-      return true;
-    }
-
     return false;
   }
 
   public isCancelButtonEnabled(): boolean {
     if (this.taskToUpdate.started) {
       return this.userSessionService.isCurrentUserAdmin() ||
-             this.taskToUpdate.creator?.id === this.currentUser.id ||
-             this.taskToUpdate.initiator?.id === this.currentUser.id;
+             this.isCurrentUserTaskCreatorOrInitiator();
     }
 
     return false;
@@ -347,7 +384,23 @@ export class TaskComponent implements OnInit {
 
   public isExecuteButtonEnabled(): boolean {
     return this.taskToUpdate.started &&
+      (this.taskToUpdate.state === Task.STATE_ASSIGNED || this.taskToUpdate.state === Task.STATE_REWORK) &&
       (this.taskToUpdate.executor?.id === this.currentUser.id || this.userSessionService.isCurrentUserAdmin()) ;
+  }
+
+  public isReworkButtonEnabled(): boolean {
+    return this.taskToUpdate.started && this.taskToUpdate.state === Task.STATE_EXECUTED &&
+      (this.isCurrentUserTaskCreatorOrInitiator() ||
+        this.userSessionService.isCurrentUserAdmin()) ;
+  }
+
+  public isFinishButtonEnabled(): boolean {
+    if (this.taskToUpdate.started && this.userSessionService.isCurrentUserAdmin()) {
+      return true;
+    }
+    return this.taskToUpdate.started &&
+           this.taskToUpdate.state === Task.STATE_EXECUTED &&
+           this.isCurrentUserTaskCreatorOrInitiator();
   }
 
 
