@@ -26,7 +26,7 @@ const routes: Routes = [
   {path: 'position/management', component: PositionComponent, canActivate: [AuthenticationGuard]},
   {path: 'user/management', component: UserComponent, canActivate: [AuthenticationGuard]},
   {path: 'employee/management', component: EmployeeComponent, canActivate: [AuthenticationGuard]},
-  {path: 'workflow/tasks', component: TaskComponent, canActivate: [AuthenticationGuard]},
+  {path: 'workflow/tasks', component: TaskComponent, canActivate: [AuthenticationGuard, ScreenGuard]},
   {path: 'settings', component: SettingsComponent, canActivate: [AuthenticationGuard]},
   {path: 'profile', component: ProfileComponent, canActivate: [AuthenticationGuard]},
   {path: 'sidebar', component: SidebarComponent, canActivate: [AuthenticationGuard]},

@@ -14,6 +14,7 @@ import {CustomHttpResponse} from "../model/custom-http-response";
 import {TabName} from "../enum/tab-name.enum";
 import {UserSessionService} from "../service/user-session.service";
 import {CardHistory} from "../model/card-history";
+import {SystemRoleName} from "../enum/system-role-name.enum";
 
 @Component({
   selector: 'app-task',
@@ -67,7 +68,11 @@ export class TaskComponent implements OnInit {
   public getExecutors(): void {
     this.userService.getUsers().subscribe(
       (response: User[]) => {
-        this.executors = response;
+        for (let user of response) {
+          if (this.userSessionService.isUserInRole(user, SystemRoleName.TASK_EXECUTOR)) {
+            this.executors.push(user);
+          }
+        }
       }
     )
   }
@@ -404,4 +409,7 @@ export class TaskComponent implements OnInit {
   }
 
 
+  public isUserTaskExecutor(executor: User) {
+    return this.userSessionService.isUserInRole(executor, SystemRoleName.TASK_EXECUTOR);
+  }
 }

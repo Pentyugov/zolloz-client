@@ -32,9 +32,8 @@ export class ScreenGuard implements CanActivate {
           break;
         case ScreenUrlEnum.TASKS :
           hasAccess = this.userSessionService.isCurrentUserAdmin() ||
-                      this.userSessionService.isCurrentUserInRole(SystemRoleName.APPLICATION_EDITOR) ||
-                      this.userSessionService.isCurrentUserInRole(SystemRoleName.TASK_EXECUTOR) ||
-                      this.userSessionService.isCurrentUserInRole(SystemRoleName.TASK_INITIATOR);
+                      this.userSessionService.isCurrentUserInRole(SystemRoleName.TASK_EXECUTOR);
+          break;
       }
     }
 

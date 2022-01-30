@@ -23,6 +23,16 @@ export class UserSessionService {
     return false;
   }
 
+  public isUserInRole(user: User, roleName: string): boolean {
+    for (let role of user.roles) {
+      if (role.name.toLowerCase() === roleName.toLowerCase()) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public isCurrentUserAdmin(): boolean {
     let user: User = this.authenticationService.getUserFromLocalCache();
     for (let role of user.roles) {

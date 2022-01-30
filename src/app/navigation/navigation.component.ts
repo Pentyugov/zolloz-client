@@ -6,6 +6,8 @@ import {Router} from "@angular/router";
 import {ChatMessageService} from "../service/chat-message.service";
 import {UserSettings} from "../model/user-settings";
 import {ApplicationService} from "../service/application.service";
+import {UserSessionService} from "../service/user-session.service";
+import {SystemRoleName} from "../enum/system-role-name.enum";
 
 @Component({
   selector: 'app-navigation',
@@ -26,7 +28,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
               private authenticationService: AuthenticationService,
               private applicationService: ApplicationService,
               private render:Renderer2,
-              private chatMessageService: ChatMessageService) {
+              private chatMessageService: ChatMessageService,
+              public userSessionService: UserSessionService) {
     this.activeTab = 'Main';
     if (localStorage.getItem('activeTab')) {
       this.activeTab = localStorage.getItem('activeTab');
@@ -60,6 +63,16 @@ export class NavigationComponent implements OnInit, OnDestroy {
         this.newChatMessagesCount = response;
       }
     )
+  }
+
+  public hasAccessToRolesScreen(): boolean {
+    return this.userSessionService.isCurrentUserAdmin();
+  }
+
+  public hasAccessToTaskScreen(): boolean {
+    return this.userSessionService.isCurrentUserAdmin() ||
+           this.userSessionService.isCurrentUserInRole(SystemRoleName.TASK_INITIATOR) ||
+           this.userSessionService.isCurrentUserInRole(SystemRoleName.TASK_EXECUTOR);
   }
 
   public updateMessagesCount(): void {

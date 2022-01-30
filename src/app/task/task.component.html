@@ -246,7 +246,10 @@
                           class="form-control"
                           [disabled]="!isFieldsEnabled()"
                           [(ngModel)]="executorId">
-                    <option [value]="executor.id" *ngFor="let executor of executors">{{executor.username}}</option>
+                    <div *ngFor="let executor of executors">
+                      <option [value]="executor.id" *ngIf="isUserTaskExecutor(executor)">{{executor.username}}</option>
+                    </div>
+
                   </select>
                 </div>
               </div>
