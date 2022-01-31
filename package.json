@@ -1,13 +1,18 @@
 {
   "name": "zolloz-client",
   "version": "0.0.0",
+  "engines": {
+    "node": "16.13.1",
+    "npm": "8.1.2"
+  },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node server.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "heroku-postbuild": "ng build — prod"
   },
   "private": true,
   "dependencies": {
@@ -25,9 +30,11 @@
     "angular-notifier": "^9.1.0",
     "angular2-multiselect-dropdown": "^5.0.4",
     "bootstrap": "^5.1.3",
+    "express": "^4.17.2",
     "net": "^1.0.2",
     "ng-multiselect-dropdown": "^0.3.7",
     "ng2-stomp-service": "^1.2.2",
+    "path": "^0.12.7",
     "rxjs": "~6.6.0",
     "sockjs-client": "^1.5.2",
     "stompjs": "^2.3.3",
