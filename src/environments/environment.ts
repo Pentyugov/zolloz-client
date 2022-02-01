@@ -8,7 +8,7 @@ export const environment = {
   // WS_URL: 'http://localhost:8080/ws',
 
   API_URL : 'https://zolloz.herokuapp.com/api',
-  WS_URL: 'https://zolloz.herokuapp.com/ws'
+  WS_URL: 'https://zolloz.herokuapp.com/wss'
 };
 
 /*
